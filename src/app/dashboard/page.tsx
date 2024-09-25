@@ -13,14 +13,14 @@ import Img7 from '../../public/images/img7.jpg';
 import Img8 from '../../public/images/img8.jpg';
 
 const itemData = [
-    { img: Img1, title: 'Bag1 Image', link: '/pages/Bag1' },
-    { img: Img2, title: 'Bag2 Image', link: '/pages/Bag2' },
-    { img: Img3, title: 'Bag3 Image', link: '/pages/Bag3' },
-    { img: Img4, title: 'Bag4 Image', link: '/pages/Bag4' },
-    { img: Img5, title: 'Bag5 Image', link: '/pages/Bag5' },
-    { img: Img6, title: 'Bag6 Image', link: '/pages/Bag6' },
-    { img: Img7, title: 'Bag7 Image', link: '/pages/Bag7' },
-    { img: Img8, title: 'Bag8 Image', link: '/pages/Bag8' },
+    { img: Img1, title: 'Bag1 Image', link: '/pages/Bag1', price: '$49.99' },
+    { img: Img2, title: 'Bag2 Image', link: '/pages/Bag2', price: '$49.99' },
+    { img: Img3, title: 'Bag3 Image', link: '/pages/Bag3', price: '$49.99' },
+    { img: Img4, title: 'Bag4 Image', link: '/pages/Bag4', price: '$49.99' },
+    { img: Img5, title: 'Bag5 Image', link: '/pages/Bag5', price: '$49.99' },
+    { img: Img6, title: 'Bag6 Image', link: '/pages/Bag6', price: '$49.99' },
+    { img: Img7, title: 'Bag7 Image', link: '/pages/Bag7', price: '$49.99' },
+    { img: Img8, title: 'Bag8 Image', link: '/pages/Bag8', price: '$49.99' },
 ];
 
 // TextSection Component
@@ -63,7 +63,7 @@ export const Dashboard: React.FC = () => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '0px', maxWidth: '1500px' }}>
             <Toolbar />
-            <Container maxWidth="xl" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 0, }}>
+            <Container maxWidth="xl" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 0,cursor:'pointer' }}>
                 <Grid container spacing={4} sx={{ width: '100%', marginBottom: 4 }}>
                     {itemData.map((item) => (
                         <Grid item xs={12} sm={6} md={3} key={item.title}>

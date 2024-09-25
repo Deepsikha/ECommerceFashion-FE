@@ -1,0 +1,81 @@
+.sidebar-deawer {
+    .MuiDrawer-paper {
+        background-color: #000;
+        width: 33.33333%;
+        height: calc(100vh - 128px);
+        max-height: 100%;
+        padding: 64px 0;
+        position: relative;
+        border-right: 1px solid #4d4d4d;
+        .MuiList-root {
+            padding: 25px 0;
+            .MuiListItem-root {
+                padding: 16px 40px;
+                &:hover {
+                    .MuiListItemText-root {
+                            .MuiTypography-root {
+                                color: #fff;
+                        }
+                    }
+                }
+                .MuiListItemText-root {
+                    cursor: pointer;
+                    .MuiTypography-root {
+                            font-weight: 700;
+                            font-size: 12px;
+                            font-size: .75rem;
+                            letter-spacing: .75px;
+                            line-height: 12px;
+                            text-transform: uppercase;  
+                            color: grey;
+                    }   
+                }
+            }
+        }
+    }
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Space between the close icon and title */
+    background-color: #3f51b5;
+    /* Same color as sidebar */
+    color: #fff;
+    /* Text color for header */
+    padding: 16px;
+    /* Add some padding */
+    position: relative;
+    /* If you need to position elements absolutely within */
+}
+
+/* Close icon styles */
+.header .close-icon {
+    color: #fff;
+    /* Ensure icon is visible */
+    cursor: pointer;
+
+    /* Show pointer on hover */
+    &:hover {
+        opacity: 0.8;
+        /* Slightly dim the icon on hover */
+    }
+}
+
+/* Title styles */
+.header .title {
+    font-size: 1.5rem;
+    /* Adjust font size as needed */
+    font-weight: bold;
+    /* Make title bold */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        /* Stack elements on smaller screens */
+        align-items: flex-start;
+        /* Align items to the start */
+    }
+}

@@ -42,13 +42,6 @@ a {
 } */
 
 body{
-  margin: 0%;
-}
-
-.css-1nxsbut{
-  max-width: none;
-}
-
-.css-n6n37r-MuiContainer-root{
-  padding-top: 0%;
+  margin: 0;
+  padding: 0 !important;
 }

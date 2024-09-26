@@ -25,11 +25,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body>
+      <body >
         <Provider store={store}>
-        <Header onSidebarToggle={toggleSidebar} />
-        {/* <Sidebar/> */}
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <Header onSidebarToggle={toggleSidebar} sidebarOpen={sidebarOpen} />
+          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main>{children}</main>
         <Footer/>
         </Provider>

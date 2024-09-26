@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Drawer, List, ListItem, ListItemText, Divider, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectMenuItems } from '../store/menuSlice';
 import { useRouter } from 'next/navigation';
@@ -16,20 +15,22 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const menuItems = useSelector(selectMenuItems);
   const router = useRouter();
   const [activeItem, setActiveItem] = useState<number | null>(null);
+  const [activeSubItem, setActiveSubItem] = useState<number | null>(null);
 
   const handleNavigation = (path: string, itemId: number) => {
     router.push(path);
     setActiveItem(itemId);
+    setActiveSubItem(null);
     onClose();
   };
 
-  const handleMouseEnter = (itemId: number) => {
-    setActiveItem(itemId);
+  const handleMouseEnter = (itemId: number) => setActiveItem(itemId);
+  const handleMouseLeave = () => {
+    setActiveItem(null);
+    setActiveSubItem(null);
   };
 
-  const handleMouseLeave = () => {
-    // Optionally, keep the item active on hover until another item is hovered
-  };
+  const handleSubMouseEnter = (subItemId: number) => setActiveSubItem(subItemId);
 
   return (
     <Drawer
@@ -39,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
       onClose={onClose}
       sx={{
         '& .MuiDrawer-paper': {
-          color: '#fff', // Text color
+          color: '#fff',
           backgroundColor: 'transparent',
         },
       }}
@@ -49,11 +50,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         role="presentation"
         onMouseLeave={handleMouseLeave}
       >
-        <IconButton onClick={onClose} sx={{ color: '#fff' }}>
-          <CloseIcon />
-        </IconButton>
         <List>
-          {menuItems.map((item) => (
+          {menuItems.map(item => (
             <ListItem
               key={item.id}
               onMouseEnter={() => handleMouseEnter(item.id)}
@@ -61,23 +59,30 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
               className={activeItem === item.id ? 'active' : ''}
             >
               <ListItemText primary={item.title} />
-              {activeItem === item.id && (
-                <ul className='subslider-bar'>
-                  <li>
-                    <div>test</div>
-                    <ul >
-                      {item.subItems?.map((subItem) => (
-                        <li className={`product-img ${activeItem === item.id ? 'active' : ''}`} key={subItem.id}>
-                          <Image
-                            src={subItem.image}
-                            alt={subItem.title}
-                            fill
-                            style={{ objectFit: 'cover', borderRadius: '16px' }}
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
+              {activeItem === item.id && item.subItems && (
+                <ul className={`subslider-bar ${activeItem === item.id ? 'active' : ''}`}>
+                  {item.subItems.map(subItem => (
+                    <li key={subItem.id} onMouseEnter={() => handleSubMouseEnter(subItem.id)}>
+                      <ListItemText primary={subItem.title} />
+                      {activeSubItem === subItem.id && subItem.subItems && (
+                        <ul className="sub-submenu">
+                          <li className={`product-img ${activeItem === item.id ? 'active' : ''}`}>
+                            {subItem.subItems.map(subSubItem => (
+                              <div key={subSubItem.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                <Image
+                                  src={subSubItem.image}
+                                  alt={subSubItem.imageName}
+                                  width={100}
+                                  height={100}
+                                />
+                                <span style={{ marginLeft: '10px' }}>{subSubItem.imageName}</span>
+                              </div>
+                            ))}
+                          </li>
+                        </ul>
+                      )}
+                    </li>
+                  ))}
                 </ul>
               )}
             </ListItem>

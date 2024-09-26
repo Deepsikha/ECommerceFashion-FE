@@ -1,6 +1,8 @@
 import React from "react";
-import { Box, Breadcrumbs, Button, Link, Paper, Typography } from '@mui/material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import Grid from "@mui/material/Grid2";
+import Image from "next/image";
+import CustomBreadcrumbs from "@/components/Breadcrumbs";
 
 interface PageParams {
     params: {
@@ -34,27 +36,16 @@ const DescriptionTextSection: React.FC = () => (
         </Typography>
     </Paper>
 );
-const Bags: React.FC<PageParams> = ({
-    params,
-}: {
-    params: { productId: string };
-}) => {
+const Bags: React.FC<PageParams> = ({ params }: { params: { productId: string }; }) => {
+    const breadcrumbItems = [
+        { label: 'Home', href: '/' },
+        { label: 'Categories', href: '/categories' },
+        { label: 'SubCategories', href: '/categories/subCategories' },
+        { label: 'Product Details' },
+      ];
     return (
         <Box sx={{ padding: 4 }}>
-            <Breadcrumbs aria-label="breadcrumb" sx={{ margin: "0 0 25px 105px" }}>
-                <Link underline="hover" color="inherit" href="/" sx={{ fontSize: "10px" }}>
-                    Home
-                </Link>
-                <Link
-                    underline="hover"
-                    color="inherit"
-                    href="/material-ui/getting-started/installation/"
-                    sx={{ fontSize: "10px" }}
-                >
-                    Category
-                </Link>
-                <Typography sx={{ color: "text.primary", fontSize: "10px" }}>BREADCRUMB</Typography>
-            </Breadcrumbs>
+            <CustomBreadcrumbs items={breadcrumbItems} ></CustomBreadcrumbs>
             <Grid container spacing={2}>
                 <Grid
                     size={6}
@@ -62,14 +53,11 @@ const Bags: React.FC<PageParams> = ({
                         textAlign: "center",
                     }}
                 >
-                    <Box
-                        component="img"
-                        sx={{
-                            height: 700,
-                            width: 700,
-                        }}
+                    <Image
+                        height= "700"
+                        width= "700"
                         alt="Bag for women."
-                        src="/images/bag1.jpg"
+                        src="/images/bag4.jpg"
                     />
                 </Grid>
                 <Grid

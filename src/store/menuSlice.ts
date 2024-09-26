@@ -1,24 +1,35 @@
-// store/menuSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import Img1 from '../../public/images/img1.jpg';
+import Img2 from '../../public/images/img2.jpg';
+import Img3 from '../../public/images/img3.jpg';
+import Img4 from '../../public/images/img4.jpg';
+import Img5 from '../../public/images/img5.jpg';
+import Img6 from '../../public/images/img6.jpg';
+import Img7 from '../../public/images/img7.jpg';
+import Img8 from '../../public/images/img8.jpg';
+import { StaticImageData } from 'next/image';
+
+type ImageType = string | StaticImageData;
 
 interface SubSubMenuItem {
   id: number;
   title: string;
-  image: string;
+  image: ImageType; 
+  imageName: string; // Added field for image name
 }
 
 interface SubMenuItem {
   id: number;
   title: string;
-  image: string;
+  image: ImageType; 
   subItems?: SubSubMenuItem[];
 }
 
 interface MenuItem {
   id: number;
   title: string;
-  path: string; // The path for navigation
-  subItems?: SubMenuItem[];
+  path: string; 
+  subItems?: SubMenuItem[]; 
 }
 
 interface MenuState {
@@ -37,19 +48,21 @@ const initialState: MenuState = {
         {
           id: 1,
           title: 'Bags',
-          image: '/images/Bag1.jpg',
+          image: Img1,
           subItems: [
-            { id: 1, title: 'Bag 1', image: '/images/Bag1.jpg' },
-            { id: 2, title: 'Bag 2', image: '/images/bag2.jpg' },
+            { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
+            { id: 2, title: 'Bag 2', image: Img2, imageName: 'Classic Bag' },
+            { id: 3, title: 'Bag 3', image: Img3, imageName: 'Trendy Bag' }, 
           ],
         },
         {
           id: 2,
-          title: 'Shoes',
-          image: '/images/img1.jpg',
+          title: 'Mini Bags',
+          image: Img3,
           subItems: [
-            { id: 1, title: 'Shoe 1', image: '/images/img1.jpg' },
-            { id: 2, title: 'Shoe 2', image: '/images/img1.jpg' },
+            { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
+            { id: 2, title: 'Shoe 2', image: Img5, imageName: 'Formal Shoe' },
+            { id: 3, title: 'Shoe 3', image: Img6, imageName: 'Sports Shoe' }, 
           ],
         },
       ],
@@ -61,11 +74,22 @@ const initialState: MenuState = {
       subItems: [
         {
           id: 1,
-          title: 'Electronics',
-          image: '/images/img2.jpg',
+          title: 'Laptop',
+          image: Img8,
           subItems: [
-            { id: 1, title: 'Phone 1', image: '/images/img2.jpg' },
-            { id: 2, title: 'Phone 2', image: '/images/img2.jpg' },
+            { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
+            { id: 2, title: 'Bag 2', image: Img2, imageName: 'Classic Bag' },
+            { id: 3, title: 'Bag 3', image: Img3, imageName: 'Trendy Bag' }, 
+          ],
+        },
+        {
+          id: 2,
+          title: 'Shoes',
+          image: Img4,
+          subItems: [
+            { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
+            { id: 2, title: 'Shoe 2', image: Img5, imageName: 'Formal Shoe' },
+            { id: 3, title: 'Shoe 3', image: Img6, imageName: 'Sports Shoe' }, 
           ],
         },
       ],
@@ -75,10 +99,25 @@ const initialState: MenuState = {
       title: 'About',
       path: '/about',
       subItems: [
-        {
+         {
           id: 1,
-          title: 'Our Team',
-          image: '/images/img2.jpg',
+          title: 'Necklace',
+          image: Img7,
+          subItems: [
+            { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
+            { id: 2, title: 'Bag 2', image: Img2, imageName: 'Classic Bag' },
+            { id: 3, title: 'Bag 3', image: Img3, imageName: 'Trendy Bag' }, 
+          ],
+        },
+        {
+          id: 2,
+          title: 'Shoes',
+          image: Img5,
+          subItems: [
+            { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
+            { id: 2, title: 'Shoe 2', image: Img5, imageName: 'Formal Shoe' },
+            { id: 3, title: 'Shoe 3', image: Img6, imageName: 'Sports Shoe' }, 
+          ],
         },
       ],
     },
@@ -87,10 +126,25 @@ const initialState: MenuState = {
       title: 'Contact',
       path: '/contact',
       subItems: [
-        {
+         {
           id: 1,
-          title: 'Support',
-          image: '/images/img2.jpg',
+          title: 'Bags',
+          image: Img6,
+          subItems: [
+            { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
+            { id: 2, title: 'Bag 2', image: Img2, imageName: 'Classic Bag' },
+            { id: 3, title: 'Bag 3', image: Img3, imageName: 'Trendy Bag' }, 
+          ],
+        },
+        {
+          id: 2,
+          title: 'Shoes',
+          image: Img5,
+          subItems: [
+            { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
+            { id: 2, title: 'Shoe 2', image: Img5, imageName: 'Formal Shoe' },
+            { id: 3, title: 'Shoe 3', image: Img6, imageName: 'Sports Shoe' }, 
+          ],
         },
       ],
     },

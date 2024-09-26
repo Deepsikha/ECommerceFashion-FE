@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap'); 
+
 .sidebar-deawer {
     animation: ammslide-In .7s cubic-bezier(0, 0, .2, 1);
 
@@ -60,7 +62,7 @@
                     position: absolute;
                     left: 100%;
                     width: 100%;
-                    padding: 25px 0;
+                    padding: 25px;
                     list-style: none;
                     top: 0;
                     font-weight: 700;
@@ -73,6 +75,10 @@
                     border-left: 1px solid #4d4d4d;
                     height: calc(100% - 50px);
                     display: none;
+                    flex-direction: column;
+                    span {
+                        color: #fff;
+                    }
                     &.active {
                         display: flex;
                     }
@@ -122,6 +128,10 @@
             }
         }
     }
+    .MuiBackdrop-root {
+        height: calc(100% - 64px);
+        top: 64px;
+    }
 }
 @keyframes ammslide-In {
     0% {
@@ -138,3 +148,49 @@
         visibility: visible
     }
 }
+
+// header 
+.header-icons{
+    color: #000;
+}
+
+.heading{
+    line-height: 1.85rem;
+    font-size: 1.5rem;
+}
+
+//breadcrumbs
+.MuiBreadcrumbs-li p ,.MuiBreadcrumbs-li a, .MuiBreadcrumbs-separator {
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.Top-heading{
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.085rem;
+    text-align: center;
+}
+
+.categories-link{
+    text-transform: uppercase;
+    font-size: .875rem;
+    letter-spacing: .75px;
+    line-height: 20px;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: center;
+    font-weight: 700;
+    color: black;
+    &:hover{
+        background: #cacaca;
+    }
+}
+
+#category-list{
+    .css-xiduvl-MuiPaper-root-MuiCard-root{
+        box-shadow: none;
+        border-radius: 0;
+    }
+}
+

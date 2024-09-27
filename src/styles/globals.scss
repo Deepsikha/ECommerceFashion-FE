@@ -149,48 +149,112 @@
     }
 }
 
-// header 
-.header-icons{
-    color: #000;
+.MuiToolbar-root{
+    .MuiBox-root{
+        .header-icons{
+            color: #000;
+        }
+    }
+}
+//category
+.MuiBox-root{
+    .MuiTypography-root.Top-heading{
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.085rem;
+            text-align: center;
+    }
+    .MuiBox-root{
+        .MuiGrid2-root{
+            .categories-link{
+                text-transform: uppercase;
+                font-size: .875rem;
+                letter-spacing: .75px;
+                line-height: 20px;
+                padding: 10px 30px;
+                display: flex;
+                justify-content: center;
+                font-weight: 700;
+                color: black;
+                &:hover{
+                    background: #cacaca;
+                }
+            }   
+        }
+    }
 }
 
-.heading{
-    line-height: 1.85rem;
-    font-size: 1.5rem;
+// wishlist
+.MuiBox-root{
+    .MuiGrid2-root{
+        .MuiBox-root{
+            .MuiTypography-root.heading{
+                line-height: 1.85rem;
+                font-size: 1.5rem;
+            }
+        }
+    }
 }
 
 //breadcrumbs
-.MuiBreadcrumbs-li p ,.MuiBreadcrumbs-li a, .MuiBreadcrumbs-separator {
-    text-transform: uppercase;
-    font-size: 10px;
-}
-
-.Top-heading{
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.085rem;
-    text-align: center;
-}
-
-.categories-link{
-    text-transform: uppercase;
-    font-size: .875rem;
-    letter-spacing: .75px;
-    line-height: 20px;
-    padding: 10px 30px;
-    display: flex;
-    justify-content: center;
-    font-weight: 700;
-    color: black;
-    &:hover{
-        background: #cacaca;
+.MuiBox-root{
+    .MuiTypography-root{
+        .MuiBreadcrumbs-ol{
+            .MuiBreadcrumbs-li p ,.MuiBreadcrumbs-li a, .MuiBreadcrumbs-separator {
+                text-transform: uppercase;
+                font-size: 10px;
+            }
+        }
     }
 }
 
-#category-list{
-    .css-xiduvl-MuiPaper-root-MuiCard-root{
-        box-shadow: none;
-        border-radius: 0;
+#category-list, #subcategory-list{
+    .MuiGrid2-root{
+        .MuiGrid2-root{
+            .MuiPaper-root {
+                box-shadow: none;
+                border-radius: 0;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            .MuiTypography-h5, .MuiTypography-body2{
+                text-transform: uppercase;
+                font-weight: bold;
+                letter-spacing: 2.5px;
+                font-size: 20px;
+            }
+            .MuiTypography-h4{
+                text-align: center;
+            }
+            .Card-wish-icon{
+                position: absolute;
+                right: 15px;
+                top: 15px;
+                z-index: 100;
+                background:#00000054;
+                svg {
+                    height: 18px;
+                    width: 18px;
+                }
+                &:hover {
+                    background:#00000025;
+                }
+            }
+            .card-item  {
+                .MuiCardActions-root {
+                    margin-top: auto;
+                }
+            }
+            // .MuiTypography-root{
+            //     .MuiButton-root{
+            //         background: "black";
+            //         color: "white";
+            //         padding: "10px 50px";
+            //         font-weight: "bold";
+            //     }
+            // }
+        }
     }
 }
-

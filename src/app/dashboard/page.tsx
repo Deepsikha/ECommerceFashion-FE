@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Box, Link, Toolbar, Container, Typography, Paper, Grid, Button } from '@mui/material';
+import { Box, Link, Toolbar, Container, Typography, Paper, Button } from '@mui/material';
+import Grid from "@mui/material/Grid2";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import DashImag1 from '../../../public/images/dash1.jpg';
@@ -139,7 +140,7 @@ export const Dashboard: React.FC = () => {
                                     }}
                                 >
                                     {itemData.map((item) => (
-                                        <Grid item xs={12} sm={6} md={3} key={item.title} sx={{ flexShrink: 0 }}>
+                                        <Grid key={item.title} sx={{width: {xs: '100%', sm: '50%',  md: '25%',  }, flexShrink: 0 }}>
                                             <Box
                                                 onClick={() => handleImageClick(item.link)}
                                                 sx={{
@@ -152,7 +153,7 @@ export const Dashboard: React.FC = () => {
                                                     transition: 'transform 0.3s, box-shadow 0.3s',
                                                     '&:hover': {
                                                         transform: 'scale(1.05)',
-                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
+                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)', 
                                                     },
                                                 }}
                                             >
@@ -392,7 +393,7 @@ export const Dashboard: React.FC = () => {
                                     }}
                                 >
                                     {itemData.map((item) => (
-                                        <Grid item xs={12} sm={6} md={3} key={item.title} sx={{ flexShrink: 0 }}>
+                                        <Grid key={item.title} sx={{width: {xs: '100%', sm: '50%', md: '25%' }, flexShrink: 0 }}>
                                             <Box
                                                 onClick={() => handleImageClick(item.link)}
                                                 sx={{

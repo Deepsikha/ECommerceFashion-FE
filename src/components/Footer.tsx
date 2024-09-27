@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
     Box,
     Container,
-    Grid,
     Typography,
     Link,
     IconButton,
@@ -12,6 +11,7 @@ import {
     Button,
     Snackbar,
 } from '@mui/material';
+import Grid from "@mui/material/Grid2";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
         <Box sx={{ backgroundColor: '#282c34', color: '#fff', padding: '40px 0', marginTop: '10px' }}>
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
-                    <Grid item xs={12} sm={3}>
+                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
                         <Typography variant="h6" gutterBottom>
                             Company
                         </Typography>
@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
                         <br />
                         <Link href="#" color="inherit" underline="none">Privacy Policy</Link>
                     </Grid>
-                    <Grid item xs={12} sm={3}>
+                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
                         <Typography variant="h6" gutterBottom>
                             Help
                         </Typography>
@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
                         <br />
                         <Link href="#" color="inherit" underline="none">Shipping Info</Link>
                     </Grid>
-                    <Grid item xs={12} sm={3}>
+                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
                         <Typography variant="h6" gutterBottom>
                             Follow Us
                         </Typography>
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
                             <IconButton color="inherit" href="#"><LinkedInIcon /></IconButton>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={3}>
+                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
                         {/* Email Subscription Section */}
                         <Box sx={{ textAlign: 'center' }}>
                             <Typography variant="h6" gutterBottom>

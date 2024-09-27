@@ -1,23 +1,62 @@
+'use client'
 import CustomBreadcrumbs from "@/components/Breadcrumbs";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import {
     Box,
     Button,
     Card,
-    CardActions,
     CardContent,
     CardMedia,
+    IconButton,
     Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
 
+const products=[
+    { id: 1, title: "Product1", image: "/images/img1.jpg", price: 125},
+    { id: 2, title: "Product2", image: "/images/img2.jpg", price: 125},
+    { id: 3, title: "Product3", image: "/images/img3.jpg", price: 125},
+    { id: 4, title: "Product4", image: "/images/img4.jpg", price: 125},
+    { id: 5, title: "Product5", image: "/images/img5.jpg", price: 125},
+    { id: 6, title: "Product6", image: "/images/img6.jpg", price: 125},
+    { id: 7, title: "Product7", image: "/images/img7.jpg", price: 125},
+    { id: 8, title: "Product8", image: "/images/img8.jpg", price: 125},
+    { id: 9, title: "Product9", image: "/images/nack1.jpg", price: 125},
+]
+interface WishList {
+    id: number,
+    wishListed:boolean
+}
+
 const Categories: React.FC = () => {
+    const [wishList,setWishList]=useState<WishList[]>([]);
+
     const breadcrumbItems = [
         { label: "Home", href: "/" },
         { label: "Categories", href: "/categories" },
         { label: "All Categories" },
     ];
+
+    function handelWishList(id:number) {
+        console.log("wishList>>>>",wishList)
+        setWishList((prev)=>{
+            const existingItem = prev.find(item => item.id === id);
+                if(existingItem){
+                    return prev.map(item => 
+                        item.id === id ? { ...item, wishListed: !item.wishListed } : item)
+                }else{
+                    return [...prev, { id, wishListed: true }];
+                }
+            }
+        );
+    }
+
+    const isWishListed=(id:number)=>{
+        const item = wishList.find(item=>item.id === id);
+        return item ? item.wishListed : false;
+    }
     return (
         <>
             <Box sx={{ padding: 4 }} id="category-list">
@@ -55,304 +94,60 @@ const Categories: React.FC = () => {
                 <Grid
                     container
                     spacing={4}
-                    sx={{ margin: "50px 50px", rowGap: "50px", justifyContent: "center" }}
+                    sx={{ margin: "50px 50px", rowGap: "50px", display: 'grid' , gridTemplateColumns: 'repeat( auto-fit, minmax(300px, 1fr) )' }}
                 >
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    height: 500,
-                                    position: "relative",
-                                    width: "100%",
-                                    overflow: "hidden",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                    },
-                                }}
-                                image="/images/Bag4.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
+                    {products.map((product,index)=>{
+                            return(
+                                <>
+                                <Grid className={"card-item"} key={`category-${index}`}>
+                                    <Card sx={{ maxWidth: 345 }}>
+                                        <IconButton color="inherit" className="Card-wish-icon" onClick={()=>handelWishList(product.id)}>
+                                            <FavoriteIcon sx={{ color: isWishListed(product.id) ? '#ff3d3d' : '#ffffff' }} />
+                                        </IconButton>
+                                        <Box sx={{
+                                            height: 500,
+                                            position: "relative",
+                                            width: "100%",
+                                            overflow: "hidden",
+                                        }}>
+                                            <Link href={`/pages/${product.id}`}>
+                                                <CardMedia
+                                                    sx={{
+                                                        height: "100%",
+                                                        transition: "transform 0.3s, box-shadow 0.3s",
+                                                        "&:hover": {
+                                                            transform: "scale(1.05)",
+                                                        },
+                                                    }}
+                                                    image={product.image}
+                                                    title="green iguana"
+                                                />
+                                            </Link>
+                                        </Box>
+                                        <CardContent sx={{ textAlign: "center" }}>
+                                            <Typography gutterBottom variant="h5" component="div">
+                                                {product.title}
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: "text.secondary" }}>${product.price}
+                                            </Typography>
+                                        </CardContent>
+                                <Typography variant="h4">
+                                    <Button
+                                        sx={{
+                                            background: "black",
+                                            color: "white",
+                                            padding: "5px 5px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        Add To Cart
+                                    </Button>
                                 </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                className="card-image"
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag2.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag3.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag5_1.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag5.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag6.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag7.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag8.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                    <Grid className={"card-item"}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                sx={{
-                                    position: "relative",
-                                    width: "100%",
-                                    height: 500,
-                                    overflow: "hidden",
-                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                                    transition: "transform 0.3s, box-shadow 0.3s",
-                                    "&:hover": {
-                                        transform: "scale(1.05)",
-                                        boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                                    },
-                                }}
-                                image="/images/Bag9.jpg"
-                                title="green iguana"
-                            />
-                            <CardContent sx={{ textAlign: "center" }}>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    Lizard
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
-                                </Typography>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: "center" }}>
-                                <Button size="small">Share</Button>
-                                <Button size="small">Learn More</Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
+                                    </Card>
+                                </Grid>
+                                </>
+                            )
+                        })}
                 </Grid>
             </Box>
         </>

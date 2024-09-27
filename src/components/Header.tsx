@@ -1,4 +1,4 @@
-'use client';
+// src/components/Header.tsx
 import React, { useState } from 'react';
 import {
   AppBar,
@@ -6,6 +6,7 @@ import {
   IconButton,
   Typography,
   Box,
+  Badge,
   Container,
   InputBase,
 } from '@mui/material';
@@ -18,16 +19,26 @@ import CloseIcon from '@mui/icons-material/Close';
 import SignIn from '@/app/signin/page';
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
-import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import Cart from '../../src/app/cart/page';
+import { CartItemType } from '@/store/cartSlice';
 
 interface HeaderProps {
   onSidebarToggle: () => void;
   sidebarOpen: boolean;
+  addToCart: (item: CartItemType) => void;
+  removeFromCart: (id: number) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) => {
+export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen, addToCart, removeFromCart }) => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  // Access cart count and items from Redux state
+  const cartCount = useSelector((state: RootState) => state.cart.cartCount);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const handleSearchToggle = () => {
     setSearchVisible((prev) => !prev);
@@ -41,6 +52,16 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
   const handleCloseSignIn = () => {
     setSignInOpen(false);
     document.body.style.overflow = 'auto';
+  };
+
+  const handleCartClick = () => {
+    setCartOpen(true);
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  };
+
+  const handleCloseCart = () => {
+    setCartOpen(false);
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
   };
 
   return (
@@ -58,17 +79,15 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
       >
         <Container maxWidth="xl">
           <Toolbar sx={{ padding: '0 8px', justifyContent: 'space-between' }}>
-            {/* Sidebar Toggle Button */}
             <IconButton
               edge="start"
               color="inherit"
               onClick={onSidebarToggle}
               sx={{ ml: 0, mr: 1 }}
             >
-              {sidebarOpen ? <CloseIcon sx={{ color: '#ffffff',cursor:'pointer' }} /> : <MenuIcon sx={{ color: sidebarOpen ? '#fff' : '#282c34' }} />}
+              {sidebarOpen ? <CloseIcon sx={{ color: '#ffffff' }} /> : <MenuIcon sx={{ color: sidebarOpen ? '#fff' : '#282c34' }} />}
             </IconButton>
 
-            {/* Website Name */}
             <Typography
               variant="h6"
               sx={{
@@ -83,7 +102,6 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
               ECommerce Fashion
             </Typography>
 
-            {/* Search Input */}
             {searchVisible && (
               <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
                 <InputBase
@@ -99,20 +117,20 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
               </Box>
             )}
 
-            {/* Search Icon to toggle search input */}
             <IconButton color="inherit" onClick={handleSearchToggle}>
               <SearchIcon sx={{ color: sidebarOpen ? '#fff' : '#282c34' }} />
             </IconButton>
 
-            {/* Icons on the Right */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Link href={"/"} className="header-icons">
                 <IconButton color="inherit">
-                  <HomeIcon />
+                  <HomeIcon sx={{ color: sidebarOpen ? '#fff' : '#282c34' }} />
                 </IconButton>
               </Link>
-              <IconButton color="inherit">
-                <ShoppingCartIcon sx={{ color: sidebarOpen ? '#fff' : '#282c34' }} />
+              <IconButton color="inherit" onClick={handleCartClick}>
+                <Badge badgeContent={cartCount} color="error">
+                  <ShoppingCartIcon sx={{ color: sidebarOpen ? '#fff' : '#282c34' }} />
+                </Badge>
               </IconButton>
               <Link href={"/wishlist"} className="header-icons">
                 <IconButton color="inherit">
@@ -127,7 +145,6 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
         </Container>
       </AppBar>
 
-      {/* Conditional Rendering of Sign-In Sidebar */}
       {signInOpen && (
         <>
           <div
@@ -144,7 +161,7 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
               transition: 'transform 0.3s ease-in-out',
             }}
           >
-            <IconButton onClick={handleCloseSignIn} style={{ marginBottom: '20px', color: 'white' }}>
+            <IconButton onClick={handleCloseSignIn} style={{ marginTop: '60px', color: 'white' }}>
               <CloseIcon />
             </IconButton>
             <SignIn />
@@ -160,6 +177,46 @@ export const Header: React.FC<HeaderProps> = ({ onSidebarToggle, sidebarOpen }) 
               zIndex: 1000,
             }}
             onClick={handleCloseSignIn}
+          />
+        </>
+      )}
+
+      {cartOpen && (
+        <>
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              width: '500px',
+              height: '100%',
+              backgroundColor: 'black',
+              color: 'white',
+              zIndex: 1100,
+              padding: '20px',
+              transition: 'transform 0.3s ease-in-out',
+            }}
+          >
+            <IconButton onClick={handleCloseCart} style={{ marginTop: '60px', color: 'white' }}>
+              <CloseIcon />
+            </IconButton>
+            <Cart
+              cartItems={cartItems}
+              addToCart={addToCart}
+              removeFromCart={removeFromCart}
+            />
+          </div>
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 1000,
+            }}
+            onClick={handleCloseCart}
           />
         </>
       )}

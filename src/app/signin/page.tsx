@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import axios from 'axios';
 import {
     Box,
     Button,
@@ -21,9 +22,10 @@ const SignIn = () => {
     const [isSignIn, setIsSignIn] = useState(true);
     const [isTCAccepted, setIsTCAccepted] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({
+
+        const userData = {
             name,
             address,
             phoneNumber,
@@ -33,9 +35,20 @@ const SignIn = () => {
             confirmPassword,
             rememberMe,
             isTCAccepted,
-        });
-        // Handle sign in or sign up logic here
-    };
+        };
+
+        try {
+            const response = await axios.post(isSignIn ? '/api/login' : '/api/register', userData);
+            console.log(response.data); // Handle successful response accordingly
+
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Error:', error.response?.data || error.message); // Handle error accordingly
+            } else {
+                console.error('Unexpected Error:', error);
+            }
+        }
+    }, [name, address, phoneNumber, dob, email, password, confirmPassword, rememberMe, isTCAccepted, isSignIn]);
 
     return (
         <Box
@@ -105,17 +118,17 @@ const SignIn = () => {
                                     },
                                 },
                                 '& .MuiInputBase-input': {
-                                    color: '#ffffff', // Text color
+                                    color: '#ffffff',
                                 },
                                 '& .MuiInputLabel-root': {
-                                    color: '#ffffff', // Label color
+                                    color: '#ffffff',
                                     '&.Mui-focused': {
-                                        color: '#007bff', // Focused label color
+                                        color: '#007bff',
                                     },
                                 },
                                 '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray', // Placeholder color
-                                    opacity: 0.7, // Placeholder opacity
+                                    color: 'gray',
+                                    opacity: 0.7,
                                 },
                             }}
                         />
@@ -148,7 +161,7 @@ const SignIn = () => {
                                     },
                                 },
                                 '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray', // Placeholder color
+                                    color: 'gray',
                                     opacity: 0.7,
                                 },
                             }}

@@ -348,14 +348,13 @@ export const Dashboard: React.FC = () => {
                 </Box>
             </Box>
 
-            <Box sx={{
+          <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: '200px',
+                minHeight: '300px',
                 maxWidth: '2000px',
                 alignItems: 'center',
-                justifyContent: 'center',
-                marginTop:10
+                justifyContent: 'center'
             }}>
                 <Toolbar />
                 <Container maxWidth="xl" sx={{
@@ -372,7 +371,7 @@ export const Dashboard: React.FC = () => {
                             display: 'flex',
                             justifyContent: 'space-between',
                             width: '100%',
-                            maxWidth: '1800px',
+                            maxWidth: '1500px',
                             marginBottom: 4
                         }}>
                             <Button
@@ -389,11 +388,11 @@ export const Dashboard: React.FC = () => {
                                         display: 'flex',
                                         transition: 'transform 0.5s ease',
                                         transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
-                                        width: `${(itemData.length / itemsPerPage) * 100}%`,
+                                        width: `${(itemData.length / itemsPerPage) * 100}%`, 
                                     }}
                                 >
                                     {itemData.map((item) => (
-                                        <Grid key={item.title} sx={{width: {xs: '100%', sm: '50%', md: '25%' }, flexShrink: 0 }}>
+                                        <Grid key={item.title} sx={{width: {xs: '100%', sm: '50%',  md: '25%',  }, flexShrink: 0 }}>
                                             <Box
                                                 onClick={() => handleImageClick(item.link)}
                                                 sx={{
@@ -406,16 +405,18 @@ export const Dashboard: React.FC = () => {
                                                     transition: 'transform 0.3s, box-shadow 0.3s',
                                                     '&:hover': {
                                                         transform: 'scale(1.05)',
-                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
+                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)', 
                                                     },
                                                 }}
                                             >
+                                                <Link href={"/categories"}>
                                                 <Image
                                                     src={item.img}
                                                     alt={item.title}
                                                     fill
                                                     style={{ objectFit: 'cover', borderRadius: '16px' }}
                                                 />
+                                                </Link>
                                             </Box>
                                         </Grid>
                                     ))}

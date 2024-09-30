@@ -1,8 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { Button, Typography, Box } from "@mui/material";
-import { useDispatch } from "react-redux"; // Import useDispatch
-import { addToCart, removeFromCart } from "../../store/cartSlice"; // Import actions
+import { useDispatch } from "react-redux"; 
+import { addToCart, removeFromCart } from "../../store/cartSlice";
 import { CartItemType } from "../../store/cartSlice";
 
 type Props = {
@@ -10,7 +9,7 @@ type Props = {
 };
 
 const CartItem: React.FC<Props> = ({ item }) => {
-    const dispatch = useDispatch(); // Create dispatch function
+    const dispatch = useDispatch(); 
 
     return (
         <Box
@@ -42,21 +41,22 @@ const CartItem: React.FC<Props> = ({ item }) => {
             {/* Button Section */}
             <Box sx={{ display: "flex", alignItems: "center" ,marginLeft:2}}>
                 <Button
-                    variant="outlined"
+                    sx={{background:"gray",color:"black"}}
+                    variant="contained"
                     size="small"
                     onClick={() => dispatch(addToCart(item))} 
                 >
                     +
                 </Button>
                 <div style={{marginLeft:10}}>
-                {item.amount}
+                {item.quantity}
                 </div>
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     size="small"
                     onClick={() => dispatch(removeFromCart(item.id))} 
-                    sx={{ marginLeft: 1 }}
-                    disabled={item.amount <= 0}
+                    sx={{ marginLeft: 1 ,background:"gray",color:"black"}}
+                    disabled={item.quantity <= 0}
                 >
                     -
                 </Button>

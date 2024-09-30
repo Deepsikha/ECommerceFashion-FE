@@ -57,7 +57,7 @@ const Bags: React.FC<PageParams> = ({ }) => {
         id: 1,
         title: "The Logo Chain Shoulder Strap",
         price: 450.00,
-        amount: 1,
+        quantity: 1,
         image: '/images/bag4.jpg', 
     };
 

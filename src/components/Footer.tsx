@@ -37,10 +37,10 @@ export const Footer: React.FC = () => {
     };
 
     return (
-        <Box sx={{ backgroundColor: '#282c34', color: '#fff', padding: '40px 0', marginTop: '10px' }}>
+        <Box sx={{ backgroundColor: '#282c34', color: '#fff', padding: '40px 0', marginTop: '10px', zIndex: 9999, position: 'sticky' }}>
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
-                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
+                    <Grid sx={{ width: { xs:"100%", sm:"22%" }}}>
                         <Typography variant="h6" gutterBottom>
                             Company
                         </Typography>
@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
                         <br />
                         <Link href="#" color="inherit" underline="none">Privacy Policy</Link>
                     </Grid>
-                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
+                    <Grid sx={{ width: { xs:"100%", sm:"22%" }}}>
                         <Typography variant="h6" gutterBottom>
                             Help
                         </Typography>
@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
                         <br />
                         <Link href="#" color="inherit" underline="none">Shipping Info</Link>
                     </Grid>
-                    <Grid sx={{ width: { xs:"100%", sm:"25%" }}}>
+                    <Grid sx={{ width: { xs:"100%", sm:"22%" }}}>
                         <Typography variant="h6" gutterBottom>
                             Follow Us
                         </Typography>
@@ -88,8 +88,8 @@ export const Footer: React.FC = () => {
                                         sx={{
                                             bgcolor: '#fff',
                                             borderRadius: '4px',
-                                            width: '100%', // Adjust the width as needed
-                                            maxWidth: '300px', // Set a max width for better responsiveness
+                                            width: '100%',
+                                            maxWidth: '300px', 
                                             '& .MuiOutlinedInput-root': {
                                                 '& fieldset': {
                                                     borderColor: '#ccc',

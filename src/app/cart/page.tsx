@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 import { Button, Typography, Box } from "@mui/material";
 import { CartItemType } from "../../store/cartSlice";
@@ -12,7 +11,7 @@ type Props = {
 
 const Cart: React.FC<Props> = ({ cartItems = [] }) => {
     const calculateTotal = (items: CartItemType[]) =>
-        items.reduce((acc, item) => acc + item.amount * item.price, 0);
+        items.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
     // Load Razorpay script dynamically
     useEffect(() => {
@@ -27,7 +26,7 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
 
     // Function to initiate Razorpay payment
     const handleCheckout = async () => {
-        const totalAmount = calculateTotal(cartItems) || 0; // This will be a string
+        const totalAmount = calculateTotal(cartItems) || 0; 
 
         // Convert totalAmount to a number for the arithmetic operation
         const amountInPaisa = totalAmount * 100; 
@@ -38,7 +37,6 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
             currency: "INR",
             name: "ECommerce Fashion",
             description: "Payment for your order",
-            // image: "https://your-logo-url.com", 
             handler: function (response: any) {
                 alert(response.razorpay_payment_id); 
             },
@@ -77,7 +75,7 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
             {cartItems.length > 0 && (
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="success"
                     sx={{ marginTop: 2 }}
                     onClick={handleCheckout}
                 >

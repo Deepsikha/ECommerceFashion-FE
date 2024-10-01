@@ -12,6 +12,7 @@ import DashImag3 from '../../../public/images/dash3.jpg';
 import DashImag4 from '../../../public/images/dash4.jpg';
 import DashImag5 from '../../../public/images/dash5.jpg';
 import DashImag6 from '../../../public/images/dash6.jpg';
+import { useScreenSize } from '@/hooks/useScreenSize';
 
 const itemData = [
     { img: '/images/img1.jpg', title: 'Bag1 Image', link: '/pages/Product1', price: '$49.99' },
@@ -26,7 +27,7 @@ const itemData = [
 
 // TextSection Component
 const TextSection: React.FC = () => (
-    <Paper sx={{ marginTop: 4, padding: 3, borderRadius: 2,alignItems:'center', textAlign: 'center', maxWidth: '1000px', width: '100%', background: 'transparent', boxShadow: 'none' }}>
+    <Paper sx={{ marginTop: 4, padding: 3, borderRadius: 2, alignItems: 'center', textAlign: 'center', maxWidth: '1000px', width: '100%', background: 'transparent', boxShadow: 'none' }}>
         <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#333' }}>
             Explore Our Exclusive Women&apos;s Bags
         </Typography>
@@ -58,6 +59,7 @@ export const Dashboard: React.FC = () => {
     const router = useRouter();
     const itemsPerPage = 4;
     const [currentIndex, setCurrentIndex] = useState(0);
+    const {isMobile}=useScreenSize();
 
     const handleImageClick = (link: string) => {
         router.push(link);
@@ -75,8 +77,6 @@ export const Dashboard: React.FC = () => {
         }
     };
 
-    // const displayedItems = itemData.slice(currentIndex, currentIndex + itemsPerPage);
-
     return (
         <>
             <Box sx={{ position: 'relative', width: '100%', height: '1500px', overflow: 'hidden' ,cursor:'pointer'}}>
@@ -87,6 +87,7 @@ export const Dashboard: React.FC = () => {
                     style={{ objectFit: 'cover' }}
                 />
             </Box>
+            
             {/* Centered Text Section */}
             <Box sx={{ textAlign: 'center', marginTop: 2, padding: 2 }}>
                 <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold' }}>
@@ -182,9 +183,9 @@ export const Dashboard: React.FC = () => {
                     </Grid>     
                 </Container>
             </Box>
-            <Box sx={{ display: 'flex', width: '100%', height: '100vh', overflow: 'hidden' }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: '100vh', overflow: 'hidden' }}>
                 {/* First Image */}
-                <Box sx={{ position: 'relative', width: '50%', height: '100%' }}>
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' }}}>
                     <Image
                         src={DashImag2}
                         alt="Image 2"
@@ -198,7 +199,7 @@ export const Dashboard: React.FC = () => {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -206,7 +207,7 @@ export const Dashboard: React.FC = () => {
                             cursor: 'pointer',
                             transition: 'opacity 0.3s ease',
                             '&:hover': {
-                                opacity: 1, // Show overlay on hover
+                                opacity: 1, 
                             },
                         }}
                     >
@@ -217,7 +218,7 @@ export const Dashboard: React.FC = () => {
                 </Box>
 
                 {/* Second Image */}
-                <Box sx={{ position: 'relative', width: '50%', height: '100%' }}>
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
                     <Image
                         src={DashImag3}
                         alt="Image 3"
@@ -231,7 +232,7 @@ export const Dashboard: React.FC = () => {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -239,19 +240,19 @@ export const Dashboard: React.FC = () => {
                             cursor: 'pointer',
                             transition: 'opacity 0.3s ease',
                             '&:hover': {
-                                opacity: 1, // Show overlay on hover
+                                opacity: 1, 
                             },
                         }}
                     >
                         <Typography variant="h4" sx={{ color: 'white' }}>
-                            Bages
+                            Bags
                         </Typography>
                     </Box>
                 </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', width: '100%', height: '100vh', overflow: 'hidden' }}>
-                <Box sx={{ position: 'relative', width: '50%', height: '100%' }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: '100vh', overflow: 'hidden' }}>
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
                     <Image
                         src={DashImag4}
                         alt="Image 4"
@@ -265,7 +266,7 @@ export const Dashboard: React.FC = () => {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -273,7 +274,7 @@ export const Dashboard: React.FC = () => {
                             cursor: 'pointer',
                             transition: 'opacity 0.3s ease',
                             '&:hover': {
-                                opacity: 1, // Show overlay on hover
+                                opacity: 1, 
                             },
                         }}
                     >
@@ -283,7 +284,7 @@ export const Dashboard: React.FC = () => {
                     </Box>
                 </Box>
 
-                <Box sx={{ position: 'relative', width: '50%', height: '100%' }}>
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
                     <Image
                         src={DashImag5}
                         alt="Image 5"
@@ -297,7 +298,7 @@ export const Dashboard: React.FC = () => {
                             left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -305,18 +306,18 @@ export const Dashboard: React.FC = () => {
                             cursor: 'pointer',
                             transition: 'opacity 0.3s ease',
                             '&:hover': {
-                                opacity: 1, // Show overlay on hover
+                                opacity: 1,
                             },
                         }}
                     >
                         <Typography variant="h4" sx={{ color: 'white' }}>
-                            Mini Bages
+                            Mini Bags
                         </Typography>
                     </Box>
                 </Box>
             </Box>
 
-            <Box sx={{ position: 'relative', width: '100%', height: '1100px', overflow: 'hidden' }}>
+            <Box sx={{ position: 'relative', flexDirection: { xs: 'column', sm: 'row' }, width: '100%',height: { xs: '50vh', sm: '1100px' }, overflow: 'hidden' }}>
                 <Image
                     src={DashImag6}
                     alt="Dashboard Background"
@@ -330,7 +331,7 @@ export const Dashboard: React.FC = () => {
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent overlay
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -338,12 +339,12 @@ export const Dashboard: React.FC = () => {
                         cursor: 'pointer',
                         transition: 'opacity 0.3s ease',
                         '&:hover': {
-                            opacity: 1, // Show overlay on hover
+                            opacity: 1, 
                         },
                     }}
                 >
                     <Typography variant="h4" sx={{ color: 'white' }}>
-                        Goggles & Bages
+                        Goggles & Bags
                     </Typography>
                 </Box>
             </Box>

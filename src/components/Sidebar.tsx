@@ -5,6 +5,7 @@ import { selectMenuItems } from '../store/menuSlice';
 import { useRouter } from 'next/navigation';
 import '../styles/globals.scss';
 import Image from 'next/image';
+import { useScreenSize } from '@/hooks/useScreenSize';
 
 interface SidebarProps {
   open: boolean;
@@ -16,6 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const router = useRouter();
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const [activeSubItem, setActiveSubItem] = useState<number | null>(null);
+  const {isMobile}=useScreenSize();
 
   const handleNavigation = (path: string, itemId: number) => {
     router.push(path);
@@ -42,6 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         '& .MuiDrawer-paper': {
           color: '#fff',
           backgroundColor: 'transparent',
+          width: isMobile ? '500px' : '100%'
         },
       }}
     >

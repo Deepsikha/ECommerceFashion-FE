@@ -110,7 +110,6 @@ const Categories: React.FC = () => {
   ];
 
   function handelWishList(id: number) {
-    console.log("wishList>>>>", wishList);
     setWishList((prev) => {
       const existingItem = prev.find((item) => item.id === id);
       if (existingItem) {
@@ -131,6 +130,7 @@ const Categories: React.FC = () => {
   return (
     <>
       <Box sx={{ padding: 4 }} id="subcategory-list">
+        {/* Breadcrumbs section */}
         <CustomBreadcrumbs items={breadcrumbItems}></CustomBreadcrumbs>
         <Typography variant="h4" className="Top-heading">
           View All Sub Categories
@@ -171,6 +171,8 @@ const Categories: React.FC = () => {
             </Grid>
           </Grid>
         </Box>
+
+        {/* SubCategories section */}
         <Grid
           container
           spacing={4}
@@ -186,6 +188,7 @@ const Categories: React.FC = () => {
               <>
                 <Grid className={"card-item"} key={`category-${index}`}>
                   <Card sx={{ maxWidth: 345 }}>
+                    {/* wishlist Icon */}
                     <IconButton
                       color="inherit"
                       className="Card-wish-icon"
@@ -199,6 +202,7 @@ const Categories: React.FC = () => {
                         }}
                       />
                     </IconButton>
+                    {/* product Info section */}
                     <Box
                       sx={{
                         height: 300,

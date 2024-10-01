@@ -29,11 +29,11 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
         const totalAmount = calculateTotal(cartItems) || 0; 
 
         // Convert totalAmount to a number for the arithmetic operation
-        const amountInPaisa = totalAmount * 100; 
+        const amountInRupees = totalAmount * 100; 
 
         const options = {
             key: "rzp_test_LAGWrBltvmtMrE", 
-            amount: (amountInPaisa * 83.70),
+            amount: (amountInRupees * 83.70),
             currency: "INR",
             name: "ECommerce Fashion",
             description: "Payment for your order",
@@ -58,20 +58,21 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
     };
 
     return (
-        <Box sx={{ padding: 2 }}>
-            <Typography variant="h4" gutterBottom>
+        <Box sx={{ padding: 4, maxWidth: 600, margin: 'auto' }}>
+            <Typography variant="h5" sx={{marginBottom:2, fontWeight:'bold'}}>
                 Your Cart
             </Typography>
             {cartItems.length === 0 ? (
-                <Typography variant="body1">No items in cart.</Typography>
+                <Typography variant="body1" align='center' sx={{marginTop:2}}>No items in cart.</Typography>
             ) : (
                 cartItems.map((item) => (
                     <CartItem key={item.id} item={item} />
                 ))
             )}
-            <Typography variant="h5" sx={{ marginTop: 2 }}>
+            <Typography variant="h6" sx={{ marginTop: 2 }}>
                 Total: ${calculateTotal(cartItems).toFixed(2)}
             </Typography>
+            <Box sx={{ textAlign: 'center', marginTop: 2 }}>
             {cartItems.length > 0 && (
                 <Button
                     variant="contained"
@@ -82,6 +83,7 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
                     Proceed to Checkout
                 </Button>
             )}
+            </Box>
         </Box>
     );
 };

@@ -119,6 +119,7 @@ const Categories: React.FC = () => {
 
   return (
     <Box sx={{ padding: 4 }} id="category-list">
+        {/* breadcrumbs section */}
       <CustomBreadcrumbs items={breadcrumbItems}></CustomBreadcrumbs>
       <Typography variant="h4" className="Top-heading">
         View All Categories

@@ -18,7 +18,7 @@ const CartItem: React.FC<Props> = ({ item }) => {
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: 1,
-                borderBottom: "1px solid #ccc",
+                borderBottom: "1px solid #777474",
             }}
         >
             {/* Image Section */}

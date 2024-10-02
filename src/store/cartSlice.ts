@@ -59,7 +59,6 @@ const cartSlice = createSlice({
         const existingItem = state.items[existingItemIndex];
 
         if (state.items.length === 1 && existingItem.quantity === 1) {
-          console.log("Cannot remove the last item");
         } else if (existingItem.quantity === 1) {
           state.items.splice(existingItemIndex, 1);
         } else {
@@ -71,6 +70,19 @@ const cartSlice = createSlice({
         0
       );
     },
+
+    // Delete from cart function (removes item completely)
+    deleteFromCart(state, action: PayloadAction<number>) {
+      const itemId = action.payload;
+      state.items = state.items.filter((item) => item.id !== itemId);
+
+      state.cartCount = state.items.reduce(
+        (count, item) => count + item.quantity,
+        0
+      );
+    },
+
+    //clear form cart
     clearCart(state) {
       state.items = [];
       state.cartCount = 0;
@@ -78,6 +90,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart,deleteFromCart, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

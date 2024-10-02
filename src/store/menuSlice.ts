@@ -15,13 +15,14 @@ interface SubSubMenuItem {
   id: number;
   title: string;
   image: ImageType; 
-  imageName: string; // Added field for image name
+  imageName: string; 
 }
 
 interface SubMenuItem {
   id: number;
   title: string;
   image: ImageType; 
+  path: string; 
   subItems?: SubSubMenuItem[];
 }
 
@@ -48,6 +49,7 @@ const initialState: MenuState = {
         {
           id: 1,
           title: 'Bags',
+          path:'/categories/subcategories',
           image: Img1,
           subItems: [
             { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
@@ -58,6 +60,7 @@ const initialState: MenuState = {
         {
           id: 2,
           title: 'Mini Bags',
+          path:'/categories/subcategories',
           image: Img3,
           subItems: [
             { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
@@ -70,11 +73,12 @@ const initialState: MenuState = {
     {
       id: 2,
       title: 'Products',
-      path: '/products',
+      path: '/categories',
       subItems: [
         {
           id: 1,
           title: 'Laptop',
+          path:'/categories/subcategories',
           image: Img8,
           subItems: [
             { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
@@ -85,6 +89,7 @@ const initialState: MenuState = {
         {
           id: 2,
           title: 'Shoes',
+          path:'/categories/subcategories',
           image: Img4,
           subItems: [
             { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
@@ -97,11 +102,12 @@ const initialState: MenuState = {
     {
       id: 3,
       title: 'About',
-      path: '/about',
+      path: '/categories',
       subItems: [
          {
           id: 1,
           title: 'Necklace',
+          path:'/categories/subcategories',
           image: Img7,
           subItems: [
             { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
@@ -112,6 +118,7 @@ const initialState: MenuState = {
         {
           id: 2,
           title: 'Shoes',
+          path:'/categories/subcategories',
           image: Img5,
           subItems: [
             { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },
@@ -124,11 +131,12 @@ const initialState: MenuState = {
     {
       id: 4,
       title: 'Contact',
-      path: '/contact',
+      path: '/categories',
       subItems: [
          {
           id: 1,
           title: 'Bags',
+          path:'/categories/subcategories',
           image: Img6,
           subItems: [
             { id: 1, title: 'Bag 1', image: Img1, imageName: 'Stylish Bag' },
@@ -139,6 +147,7 @@ const initialState: MenuState = {
         {
           id: 2,
           title: 'Shoes',
+          path:'/categories/subcategories',
           image: Img5,
           subItems: [
             { id: 1, title: 'Shoe 1', image: Img4, imageName: 'Casual Shoe' },

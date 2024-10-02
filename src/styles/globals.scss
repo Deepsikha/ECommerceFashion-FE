@@ -30,7 +30,7 @@
             right: 15px;
         }
 
-        .subslider-bar {
+        .subsider-bar {
             position: absolute;
             left: 100%;
             width: 100%;
@@ -106,7 +106,7 @@
                         }
                     }
 
-                    .subslider-bar {
+                    .subsider-bar {
                         visibility: unset;
                         animation: ammslide-In .7s cubic-bezier(0, 0, .2, 1);
                     }
@@ -177,6 +177,7 @@
                 font-weight: 700;
                 color: black;
                 &:hover{
+                    color: #757272;
                     background: #cacaca;
                 }
             }   
@@ -257,4 +258,9 @@
             // }
         }
     }
+}
+
+.product-list {
+    height: calc(100vh - 345px);
+    overflow: auto;
 }

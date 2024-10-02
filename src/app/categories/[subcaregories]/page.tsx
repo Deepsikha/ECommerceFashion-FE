@@ -7,14 +7,15 @@ import {
   CardContent,
   CardMedia,
   IconButton,
+  Link as MuiLink,
   Typography,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
-import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { addToCart, CartItemType } from "@/store/cartSlice";
+import MoonLoader from "react-spinners/MoonLoader";
 
 const products = [
   {
@@ -87,7 +88,12 @@ interface WishList {
 }
 
 const Categories: React.FC = () => {
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();  
+
+  const handleLinkClick = () => {
+    setIsLoading(true);
+  };
 
   useEffect(() => {
     const storedWishList = localStorage.getItem("wishList");
@@ -146,28 +152,31 @@ const Categories: React.FC = () => {
             }}
           >
             <Grid>
-              <Link
+              <MuiLink
                 className="categories-link"
                 href={"/categories/subcategories"}
+                onClick={handleLinkClick}
               >
                 Sub Category 1
-              </Link>
+              </MuiLink>
             </Grid>
             <Grid>
-              <Link
+              <MuiLink
                 className="categories-link"
                 href={"/categories/subcategories"}
+                onClick={handleLinkClick}
               >
                 Sub Category 2
-              </Link>
+              </MuiLink>
             </Grid>
             <Grid>
-              <Link
+              <MuiLink
                 className="categories-link"
                 href={"/categories/subcategories"}
+                onClick={handleLinkClick}
               >
                 Sub Category 3
-              </Link>
+              </MuiLink>
             </Grid>
           </Grid>
         </Box>
@@ -211,7 +220,7 @@ const Categories: React.FC = () => {
                         overflow: "hidden",
                       }}
                     >
-                      <Link href={`/pages/${product.id}`}>
+                      <MuiLink href={`/pages/${product.id}`} onClick={handleLinkClick}>
                         <CardMedia
                           sx={{
                             height: "100%",
@@ -223,7 +232,7 @@ const Categories: React.FC = () => {
                           image={product.image}
                           title={product.title}
                         />
-                      </Link>
+                      </MuiLink>
                     </Box>
                     <CardContent sx={{ textAlign: "center" }}>
                       <Typography gutterBottom variant="h5" component="div">
@@ -256,6 +265,9 @@ const Categories: React.FC = () => {
                           color: "white",
                           padding: "5px 5px",
                           fontWeight: "bold",
+                          "&:hover": {
+                            background:"#a8a5a5",
+                          },
                         }}
                       >
                         Add
@@ -266,6 +278,25 @@ const Categories: React.FC = () => {
               </>
             );
           })}
+          {/* Loader Overlay */}
+      {isLoading && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            zIndex: 9999,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <MoonLoader color="#000" loading={isLoading} size={50} />
+        </Box>
+      )}
         </Grid>
       </Box>
     </>

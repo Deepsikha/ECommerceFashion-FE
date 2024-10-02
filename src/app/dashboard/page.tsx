@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Box, Link, Toolbar, Container, Typography, Paper, Button } from '@mui/material';
+import { Box, Link as MuiLink, Toolbar, Container, Typography, Paper, Button } from '@mui/material';
 import Grid from "@mui/material/Grid2";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -13,6 +13,7 @@ import DashImag4 from '../../../public/images/dash4.jpg';
 import DashImag5 from '../../../public/images/dash5.jpg';
 import DashImag6 from '../../../public/images/dash6.jpg';
 import { useScreenSize } from '@/hooks/useScreenSize';
+import MoonLoader from 'react-spinners/MoonLoader';
 
 const itemData = [
     { img: '/images/img1.jpg', title: 'Bag1 Image', link: '/pages/Product1', price: '$49.99' },
@@ -59,8 +60,12 @@ export const Dashboard: React.FC = () => {
     const router = useRouter();
     const itemsPerPage = 4;
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
     const {isMobile}=useScreenSize();
 
+    const handleLinkClick = () => {
+        setIsLoading(true);
+      };
     const handleImageClick = (link: string) => {
         router.push(link);
     };
@@ -158,14 +163,14 @@ export const Dashboard: React.FC = () => {
                                                     },
                                                 }}
                                             >
-                                                <Link href={"/categories"}>
+                                                <MuiLink href={"/categories"} onClick={handleLinkClick}>
                                                 <Image
                                                     src={item.img}
                                                     alt={item.title}
                                                     fill
                                                     style={{ objectFit: 'cover', borderRadius: '16px' }}
                                                 />
-                                                </Link>
+                                                </MuiLink>
                                             </Box>
                                         </Grid>
                                     ))}
@@ -410,14 +415,14 @@ export const Dashboard: React.FC = () => {
                                                     },
                                                 }}
                                             >
-                                                <Link href={"/categories"}>
+                                                <MuiLink href={"/categories"} onClick={handleLinkClick}>
                                                 <Image
                                                     src={item.img}
                                                     alt={item.title}
                                                     fill
                                                     style={{ objectFit: 'cover', borderRadius: '16px' }}
                                                 />
-                                                </Link>
+                                                </MuiLink>
                                             </Box>
                                         </Grid>
                                     ))}
@@ -446,6 +451,26 @@ export const Dashboard: React.FC = () => {
             <TextSection />
             <AdditionalTextSection />
             </Box>
+
+            {/* Loader Overlay */}
+      {isLoading && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            zIndex: 9999,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <MoonLoader color="#000" loading={isLoading} size={50} />
+        </Box>
+      )}
         </>
     );
 };

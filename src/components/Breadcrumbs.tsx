@@ -34,6 +34,9 @@ export default function CustomBreadcrumbs({ items }: DynamicBreadcrumbsProps) {
                             underline="hover"
                             color="inherit"
                             href={item.href}
+                            sx={{ "&:hover": {
+                                color:"#000",
+                              },}}
                         >
                             {item.label}
                         </Link>

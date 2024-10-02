@@ -7,6 +7,7 @@ type Props = {
     cartItems?: CartItemType[];
     addToCart: (clickedItem: CartItemType) => void;
     removeFromCart: (id: number) => void;
+    deleteFromCart:(id:number)=>void;
 };
 
 const Cart: React.FC<Props> = ({ cartItems = [] }) => {
@@ -58,17 +59,22 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
     };
 
     return (
-        <Box sx={{ padding: 4, maxWidth: 600, margin: 'auto' }}>
+       
+        <Box sx={{ padding: '32px 0 32px 15px', maxWidth: 600, margin: 'auto',display: "flex", flexDirection:'column' }}>
             <Typography variant="h5" sx={{marginBottom:2, fontWeight:'bold'}}>
                 Your Cart
             </Typography>
+            <div className='product-list'>
             {cartItems.length === 0 ? (
                 <Typography variant="body1" align='center' sx={{marginTop:2}}>No items in cart.</Typography>
             ) : (
                 cartItems.map((item) => (
+                    
                     <CartItem key={item.id} item={item} />
+                    
                 ))
             )}
+            </div>
             <Typography variant="h6" sx={{ marginTop: 2 }}>
                 Total: ${calculateTotal(cartItems).toFixed(2)}
             </Typography>
@@ -85,6 +91,7 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
             )}
             </Box>
         </Box>
+  
     );
 };
 

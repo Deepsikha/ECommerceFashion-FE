@@ -39,25 +39,25 @@ export const Footer: React.FC = () => {
     };
 
     return (
-        <Box sx={{ backgroundColor: '#1f1f1f', color: '#fff', padding: '60px 0', marginTop: '10px', zIndex: 9999 }}>
+        <Box sx={{ backgroundColor: '#1f1f1f', color: '#fff', padding: '60px 0', zIndex: 9999, marginTop: 'auto', }}>
             <Container maxWidth="xl">
                 <Grid container spacing={6}>
                     <Grid size={{xs:12,sm:3}}>
                         <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                             Company
                         </Typography>
-                        <Link href="#" color="inherit" underline="hover">About Us</Link><br />
-                        <Link href="#" color="inherit" underline="hover">Careers</Link><br />
-                        <Link href="#" color="inherit" underline="hover">Privacy Policy</Link>
+                        <Link href="#" color="inherit" sx={{ "&:hover": {color:"#a39e9e"}}} underline="hover">About Us</Link><br />
+                        <Link href="#" color="inherit" sx={{ "&:hover": {color:"#a39e9e"}}} underline="hover">Careers</Link><br />
+                        <Link href="#" color="inherit" sx={{ "&:hover": {color:"#a39e9e"}}} underline="hover">Privacy Policy</Link>
                     </Grid>
 
                     <Grid size={{xs:12,sm:3}}>
                         <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
                             Help
                         </Typography>
-                        <Link href="#" color="inherit" underline="hover">Contact Us</Link><br />
-                        <Link href="#" color="inherit" underline="hover">FAQ</Link><br />
-                        <Link href="#" color="inherit" underline="hover">Shipping Info</Link>
+                        <Link href="#" color="inherit" sx={{ "&:hover": {color:"#a39e9e"}}} underline="hover">Contact Us</Link><br />
+                        <Link href="#" color="inherit" sx={{ "&:hover": {color:"#a39e9e"}}} underline="hover">FAQ</Link><br />
+                        <Link href="#" color="inherit" sx={{ "&:hover": {color:"#a39e9e"}}} underline="hover">Shipping Info</Link>
                     </Grid>
 
                     <Grid size={{xs:12,sm:3}}>
@@ -131,7 +131,7 @@ export const Footer: React.FC = () => {
                             <Typography variant="body2" sx={{ marginTop: 1, textAlign: 'center' }}>
                                 By subscribing, you agree to receive our emails. You can unsubscribe at any time.
                             </Typography>
-                            <Link href="#" color="info" underline="none" sx={{ display: 'block', textAlign: 'center', marginTop: '8px' }}>
+                            <Link href="#" color="info" underline="none" sx={{ display: 'block', textAlign: 'center', marginTop: '8px', "&:hover": {color:"#a39e9e"} }}>
                                 Privacy Policy
                             </Link>
                         </form>

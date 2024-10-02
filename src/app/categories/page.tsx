@@ -9,12 +9,14 @@ import {
   CardMedia,
   IconButton,
   Typography,
+  Link as MuiLink,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid2";
-import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { addToCart, CartItemType } from "@/store/cartSlice";
+import MoonLoader from "react-spinners/MoonLoader";
+
 
 // Sample product data
 const products = [
@@ -85,7 +87,13 @@ const products = [
 
 const Categories: React.FC = () => {
   const [wishList, setWishList] = useState<number[]>([]);
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();  
+
+  const handleLinkClick = () => {
+    setIsLoading(true);
+  };
+
 
   // Load wishlist from localStorage when component mounts
   useEffect(() => {
@@ -119,11 +127,20 @@ const Categories: React.FC = () => {
 
   return (
     <Box sx={{ padding: 4 }} id="category-list">
+
         {/* breadcrumbs section */}
       <CustomBreadcrumbs items={breadcrumbItems}></CustomBreadcrumbs>
       <Typography variant="h4" className="Top-heading">
         View All Categories
       </Typography>
+
+       {/* Display Loader when isLoading is true
+       {isLoading && (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+          <MoonLoader color="#000" loading={isLoading} size={50} />
+        </Box>
+      )} */}
+      
       <Box sx={{ backgroundColor: "#e9e9e9" }}>
         <Grid
           container
@@ -135,28 +152,31 @@ const Categories: React.FC = () => {
           }}
         >
           <Grid>
-            <Link
+            <MuiLink
               className="categories-link"
               href={"/categories/subcategories1"}
+              onClick={handleLinkClick}
             >
               Category 1
-            </Link>
+            </MuiLink>
           </Grid>
           <Grid>
-            <Link
+            <MuiLink
               className="categories-link"
               href={"/categories/subcategories2"}
+              onClick={handleLinkClick}
             >
               Category 2
-            </Link>
+            </MuiLink>
           </Grid>
           <Grid>
-            <Link
+            <MuiLink
               className="categories-link"
               href={"/categories/subcategories3"}
+              onClick={handleLinkClick}
             >
               Category 3
-            </Link>
+            </MuiLink>
           </Grid>
         </Grid>
       </Box>
@@ -199,7 +219,7 @@ const Categories: React.FC = () => {
                   overflow: "hidden",
                 }}
               >
-                <Link href={`/pages/${product.id}`}>
+                <MuiLink href={`/pages/${product.id}`} onClick={handleLinkClick} >
                   <CardMedia
                     sx={{
                       height: "100%",
@@ -211,7 +231,7 @@ const Categories: React.FC = () => {
                     image={product.image}
                     title={product.title}
                   />
-                </Link>
+                </MuiLink>
               </Box>
 
               {/* Product Info */}
@@ -244,6 +264,9 @@ const Categories: React.FC = () => {
                     color: "white",
                     padding: "5px 5px",
                     fontWeight: "bold",
+                      "&:hover": {
+                        background:"#a8a5a5",
+                      },
                   }}
                 >
                   Add
@@ -252,6 +275,26 @@ const Categories: React.FC = () => {
             </Card>
           </Grid>
         ))}
+
+      {/* Loader Overlay */}
+      {isLoading && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            zIndex: 9999,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <MoonLoader color="#000" loading={isLoading} size={50} />
+        </Box>
+      )}
       </Grid>
     </Box>
   );

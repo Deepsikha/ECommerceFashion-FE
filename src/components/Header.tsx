@@ -29,6 +29,7 @@ interface HeaderProps {
   sidebarOpen: boolean;
   addToCart: (item: CartItemType) => void;
   removeFromCart: (id: number) => void;
+  deleteFromCart: (id: number) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -36,6 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   sidebarOpen,
   addToCart,
   removeFromCart,
+  deleteFromCart,
 }) => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
@@ -51,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const handleProfileClick = () => {
-    setSignInOpen(true);
+    setSignInOpen((prev) => !prev);
     document.body.style.overflow = "hidden";
   };
 
@@ -61,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const handleCartClick = () => {
-    setCartOpen(true);
+    setCartOpen((prev) => !prev);
     document.body.style.overflow = "hidden";
   };
 
@@ -92,9 +94,18 @@ export const Header: React.FC<HeaderProps> = ({
               sx={{ ml: 0, mr: 1 }}
             >
               {sidebarOpen ? (
-                <CloseIcon sx={{ color: "#ffffff" }} />
+                <CloseIcon
+                  sx={{ color: "white", "&:hover": { color: "#666161" } }}
+                />
               ) : (
-                <MenuIcon sx={{ color: sidebarOpen ? "#fff" : "#282c34" }} />
+                <MenuIcon
+                  sx={{
+                    color: sidebarOpen ? "#fff" : "#282c34",
+                    "&:hover": {
+                      color: sidebarOpen ? "#fff" : "#666161",
+                    },
+                  }}
+                />
               )}
             </IconButton>
             {/* Website Name */}
@@ -128,21 +139,40 @@ export const Header: React.FC<HeaderProps> = ({
               </Box>
             )}
             <IconButton color="inherit" onClick={handleSearchToggle}>
-              <SearchIcon sx={{ color: sidebarOpen ? "#fff" : "#282c34" }} />
+              <SearchIcon
+                sx={{
+                  color: sidebarOpen ? "#fff" : "#282c34",
+                  "&:hover": {
+                    color: sidebarOpen ? "#fff" : "#666161",
+                  },
+                }}
+              />
             </IconButton>
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {/* Home Icon */}
               <Link href={"/"} className="header-icons">
-                <IconButton color="inherit">
-                  <HomeIcon sx={{ color: sidebarOpen ? "#fff" : "#282c34" }} />
+                <IconButton color="inherit" >
+                  <HomeIcon
+                    sx={{
+                      color: sidebarOpen ? "#fff" : "#161920",
+                      "&:hover": {
+                        color: sidebarOpen ? "#fff" : "#666161",
+                      },
+                    }}
+                  />
                 </IconButton>
               </Link>
               {/* ShoppingCart Icon */}
               <IconButton color="inherit" onClick={handleCartClick}>
                 <Badge badgeContent={cartCount} color="error">
                   <ShoppingCartIcon
-                    sx={{ color: sidebarOpen ? "#fff" : "#282c34" }}
+                    sx={{
+                      color: sidebarOpen ? "#fff" : "#282c34",
+                      "&:hover": {
+                        color: sidebarOpen ? "#fff" : "#666161",
+                      },
+                    }}
                   />
                 </Badge>
               </IconButton>
@@ -150,40 +180,56 @@ export const Header: React.FC<HeaderProps> = ({
               <Link href={"/wishlist"} className="header-icons">
                 <IconButton color="inherit">
                   <FavoriteIcon
-                    sx={{ color: sidebarOpen ? "#fff" : "#282c34" }}
+                    sx={{
+                      color: sidebarOpen ? "#fff" : "#282c34",
+                      "&:hover": {
+                        color: sidebarOpen ? "#fff" : "#666161",
+                      },
+                    }}
                   />
                 </IconButton>
               </Link>
               {/* Profile Icon */}
               <IconButton color="inherit" onClick={handleProfileClick}>
                 <AccountCircle
-                  sx={{ color: sidebarOpen ? "#fff" : "#282c34" }}
+                  sx={{
+                    color: sidebarOpen ? "#fff" : "#282c34",
+                    "&:hover": {
+                      color: sidebarOpen ? "#fff" : "#666161",
+                    },
+                  }}
                 />
               </IconButton>
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
+
       {/* SignIn & SignUp Toggle */}
       {signInOpen && (
         <>
           <div
             style={{
               position: "fixed",
-              top: 0,
+              top: '64px',
               right: 0,
               width: isMobile ? "100%" : "500px",
-              height: "100%",
+              height: 'calc(100% - 64px)',
               backgroundColor: "black",
               color: "white",
               zIndex: 1100,
               padding: "20px",
               transition: "transform 0.3s ease-in-out",
+              boxSizing: 'border-box',
             }}
           >
             <IconButton
               onClick={handleCloseSignIn}
-              style={{ marginTop: "60px", color: "white" }}
+              style={{
+                marginLeft: 'auto',
+                display:'flex',
+              }}
+              sx={{ color: "white", "&:hover": { color: "#b1b1b1" } }}
             >
               <CloseIcon />
             </IconButton>
@@ -203,26 +249,32 @@ export const Header: React.FC<HeaderProps> = ({
           />
         </>
       )}
+
       {/* ShoppingCart Toggle */}
       {cartOpen && (
         <>
           <div
             style={{
               position: "fixed",
-              top: 0,
+              top: '64px',
               right: 0,
               width: isMobile ? "100%" : "500px",
-              height: "100%",
+              height: 'calc(100% - 64px)',
               backgroundColor: "black",
               color: "white",
               zIndex: 1100,
               padding: "20px",
               transition: "transform 0.3s ease-in-out",
+              boxSizing: 'border-box',
             }}
           >
             <IconButton
               onClick={handleCloseCart}
-              style={{ marginTop: "60px", color: "white" }}
+              style={{
+                marginLeft: 'auto',
+                display:'flex',
+              }}
+              sx={{ color: "white", "&:hover": { color: "#666161" } }}
             >
               <CloseIcon />
             </IconButton>
@@ -230,6 +282,7 @@ export const Header: React.FC<HeaderProps> = ({
               cartItems={cartItems}
               addToCart={addToCart}
               removeFromCart={removeFromCart}
+              deleteFromCart={deleteFromCart}
             />
           </div>
           <div

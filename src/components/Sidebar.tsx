@@ -63,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
             >
               <ListItemText primary={item.title} />
               {activeItem === item.id && item.subItems && (
-                <ul className={`subslider-bar ${activeItem === item.id ? 'active' : ''}`}>
+                <ul className={`subsider-bar ${activeItem === item.id ? 'active' : ''}`}>
                   {item.subItems.map(subItem => (
                     <li key={subItem.id} onMouseEnter={() => handleSubMouseEnter(subItem.id)}>
                       <ListItemText primary={subItem.title} />

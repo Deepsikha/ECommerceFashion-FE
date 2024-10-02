@@ -54,16 +54,14 @@ const SignIn = () => {
         <Box
             display="flex"
             flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            minHeight="100vh"
+            minHeight='calc(100% - 40px)'
             bgcolor="#000"
             p={3}
             borderRadius={2}
             boxShadow={3}
             color="#ffffff"
         >
-            <Box display="flex" mb={3}>
+            <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
                 <Button
                     onClick={() => setIsSignIn(true)}
                     variant={isSignIn ? 'contained' : 'outlined'}
@@ -73,7 +71,7 @@ const SignIn = () => {
                         borderColor: '#ffffff',
                         bgcolor: isSignIn ? '#ffffff' : 'transparent',
                         '&:hover': {
-                            bgcolor: 'rgba(255, 255, 255, 0.1)',
+                            bgcolor: '#a5a5a5',
                         },
                     }}
                 >

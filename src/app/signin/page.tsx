@@ -9,8 +9,13 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
-const SignIn = () => {
+interface SignInProps {
+    onClose: () => void;
+  }
+
+const SignIn: React.FC<SignInProps> = ({ onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,6 +26,8 @@ const SignIn = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [isSignIn, setIsSignIn] = useState(true);
     const [isTCAccepted, setIsTCAccepted] = useState(false);
+
+    const router = useRouter(); 
 
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,16 +46,21 @@ const SignIn = () => {
 
         try {
             const response = await axios.post(isSignIn ? '/api/login' : '/api/register', userData);
-            console.log(response.data); // Handle successful response accordingly
-
+            console.log(response.data); 
+            
+            // Assuming login/register is successful
+            if (response.status === 200) {
+                onClose();
+                router.push('/'); 
+            }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error('Error:', error.response?.data || error.message); // Handle error accordingly
+                console.error('Error:', error.response?.data || error.message); 
             } else {
                 console.error('Unexpected Error:', error);
             }
         }
-    }, [name, address, phoneNumber, dob, email, password, confirmPassword, rememberMe, isTCAccepted, isSignIn]);
+    }, [name, address, phoneNumber, dob, email, password, confirmPassword, rememberMe, isTCAccepted, isSignIn, router, onclose]);
 
     return (
         <Box

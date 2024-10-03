@@ -233,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <CloseIcon />
             </IconButton>
-            <SignIn />
+            <SignIn onClose={handleCloseSignIn}  />
           </div>
           <div
             style={{

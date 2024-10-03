@@ -86,7 +86,7 @@ const SignIn = () => {
                         borderColor: '#ffffff',
                         bgcolor: !isSignIn ? '#ffffff' : 'transparent',
                         '&:hover': {
-                            bgcolor: 'rgba(255, 255, 255, 0.1)',
+                            bgcolor: '#a5a5a5',
                         },
                     }}
                 >

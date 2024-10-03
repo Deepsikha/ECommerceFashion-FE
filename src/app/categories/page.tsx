@@ -11,12 +11,12 @@ import {
   Typography,
   Link as MuiLink,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Grid from "@mui/material/Grid2";
 import { useDispatch } from "react-redux";
 import { addToCart, CartItemType } from "@/store/cartSlice";
 import MoonLoader from "react-spinners/MoonLoader";
-
+import useFlyingAnimation from "@/hooks/useFlyingAnimation";
 
 // Sample product data
 const products = [
@@ -88,12 +88,15 @@ const products = [
 const Categories: React.FC = () => {
   const [wishList, setWishList] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
+  const { animateFlyToCart } = useFlyingAnimation();
+
+  // Create a ref for the button
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>(new Array(products.length).fill(null));
 
   const handleLinkClick = () => {
     setIsLoading(true);
   };
-
 
   // Load wishlist from localStorage when component mounts
   useEffect(() => {
@@ -104,7 +107,8 @@ const Categories: React.FC = () => {
   }, []);
 
   // Function to add item to the cart
-  const handleAddToCart = (item: CartItemType) => {
+  const handleAddToCart = (item: CartItemType, button: HTMLButtonElement) => {
+    animateFlyToCart(button);
     dispatch(addToCart(item));
   };
 
@@ -119,184 +123,186 @@ const Categories: React.FC = () => {
     setWishList((prev) => {
       const updatedWishList = prev.includes(id)
         ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id]; 
+        : [...prev, id];
       localStorage.setItem("wishList", JSON.stringify(updatedWishList));
       return updatedWishList;
     });
   };
 
   return (
-    <Box sx={{ padding: 4 }} id="category-list">
-
+    <>
+      <Box sx={{ padding: 4 }} id="category-list">
         {/* breadcrumbs section */}
-      <CustomBreadcrumbs items={breadcrumbItems}></CustomBreadcrumbs>
-      <Typography variant="h4" className="Top-heading">
-        View All Categories
-      </Typography>
+        <CustomBreadcrumbs items={breadcrumbItems}></CustomBreadcrumbs>
+        <Typography variant="h4" className="Top-heading">
+          View All Categories
+        </Typography>
 
-       {/* Display Loader when isLoading is true
-       {isLoading && (
-        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-          <MoonLoader color="#000" loading={isLoading} size={50} />
+        <Box sx={{ backgroundColor: "#e9e9e9" }}>
+          <Grid
+            container
+            spacing={4}
+            sx={{
+              margin: "25px 0px",
+              rowGap: "50px",
+              justifyContent: "center",
+            }}
+          >
+            <Grid>
+              <MuiLink
+                className="categories-link"
+                href={"/categories/subcategories1"}
+                onClick={handleLinkClick}
+              >
+                Category 1
+              </MuiLink>
+            </Grid>
+            <Grid>
+              <MuiLink
+                className="categories-link"
+                href={"/categories/subcategories2"}
+                onClick={handleLinkClick}
+              >
+                Category 2
+              </MuiLink>
+            </Grid>
+            <Grid>
+              <MuiLink
+                className="categories-link"
+                href={"/categories/subcategories3"}
+                onClick={handleLinkClick}
+              >
+                Category 3
+              </MuiLink>
+            </Grid>
+          </Grid>
         </Box>
-      )} */}
-      
-      <Box sx={{ backgroundColor: "#e9e9e9" }}>
+
+        {/* Products Grid */}
         <Grid
           container
           spacing={4}
           sx={{
-            margin: "25px 0px",
+            margin: "50px 50px",
             rowGap: "50px",
-            justifyContent: "center",
+            display: "grid",
+            gridTemplateColumns: "repeat( auto-fit, minmax(300px, 1fr) )",
           }}
         >
-          <Grid>
-            <MuiLink
-              className="categories-link"
-              href={"/categories/subcategories1"}
-              onClick={handleLinkClick}
-            >
-              Category 1
-            </MuiLink>
-          </Grid>
-          <Grid>
-            <MuiLink
-              className="categories-link"
-              href={"/categories/subcategories2"}
-              onClick={handleLinkClick}
-            >
-              Category 2
-            </MuiLink>
-          </Grid>
-          <Grid>
-            <MuiLink
-              className="categories-link"
-              href={"/categories/subcategories3"}
-              onClick={handleLinkClick}
-            >
-              Category 3
-            </MuiLink>
-          </Grid>
-        </Grid>
-      </Box>
-
-      {/* Products Grid */}
-      <Grid
-        container
-        spacing={4}
-        sx={{
-          margin: "50px 50px",
-          rowGap: "50px",
-          display: "grid",
-          gridTemplateColumns: "repeat( auto-fit, minmax(300px, 1fr) )",
-        }}
-      >
-        {products.map((product) => (
-          <Grid className={"card-item"} key={product.id}>
-            <Card sx={{ maxWidth: 345 }}>
-              {/* Wishlist Icon */}
-              <IconButton
-                color="inherit"
-                className="Card-wish-icon"
-                onClick={() => handleWishList(product.id)}
-              >
-                <FavoriteIcon
-                  sx={{
-                    color: wishList.includes(product.id)
-                      ? "#ff3d3d" 
-                      : "#ffffff", 
-                  }}
-                />
-              </IconButton>
-
-              {/* Product Image */}
-              <Box
-                sx={{
-                  height: 300,
-                  position: "relative",
-                  width: "100%",
-                  overflow: "hidden",
-                }}
-              >
-                <MuiLink href={`/pages/${product.id}`} onClick={handleLinkClick} >
-                  <CardMedia
+          {products.map((product) => (
+            <Grid className={"card-item"} key={product.id}>
+              <Card sx={{ maxWidth: 345 }}>
+                {/* Wishlist Icon */}
+                <IconButton
+                  color="inherit"
+                  className="Card-wish-icon"
+                  onClick={() => handleWishList(product.id)}
+                >
+                  <FavoriteIcon
                     sx={{
-                      height: "100%",
-                      transition: "transform 0.3s, box-shadow 0.3s",
-                      "&:hover": {
-                        transform: "scale(1.05)",
-                      },
+                      color: wishList.includes(product.id)
+                        ? "#ff3d3d"
+                        : "#ffffff",
                     }}
-                    image={product.image}
-                    title={product.title}
                   />
-                </MuiLink>
-              </Box>
+                </IconButton>
 
-              {/* Product Info */}
-              <CardContent sx={{ textAlign: "center" }}>
-                <Typography gutterBottom variant="h5" component="div">
-                  {product.title}
-                </Typography>
-                <Typography sx={{ color: "gray" }} component="div">
-                  {product.description}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  ${product.price}
-                </Typography>
-              </CardContent>
-
-              {/* Add to Cart Button */}
-              <Typography variant="h4">
-                <Button
-                  onClick={() =>
-                    handleAddToCart({
-                      id: product.id,
-                      title: product.title,
-                      price: product.price,
-                      image: product.image,
-                      quantity: 1,
-                    })
-                  }
+                {/* Product Image */}
+                <Box
                   sx={{
-                    background: "black",
-                    color: "white",
-                    padding: "5px 5px",
-                    fontWeight: "bold",
-                      "&:hover": {
-                        background:"#a8a5a5",
-                      },
+                    height: 300,
+                    position: "relative",
+                    width: "100%",
+                    overflow: "hidden",
                   }}
                 >
-                  Add
-                </Button>
-              </Typography>
-            </Card>
-          </Grid>
-        ))}
+                  <MuiLink
+                    href={`/pages/${product.id}`}
+                    onClick={handleLinkClick}
+                  >
+                    <CardMedia
+                      sx={{
+                        height: "100%",
+                        transition: "transform 0.3s, box-shadow 0.3s",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                        },
+                      }}
+                      image={product.image}
+                      title={product.title}
+                    />
+                  </MuiLink>
+                </Box>
 
-      {/* Loader Overlay */}
-      {isLoading && (
-        <Box
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            zIndex: 9999,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <MoonLoader color="#000" loading={isLoading} size={50} />
-        </Box>
-      )}
-      </Grid>
-    </Box>
+                {/* Product Info */}
+                <CardContent sx={{ textAlign: "center" }}>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {product.title}
+                  </Typography>
+                  <Typography sx={{ color: "gray" }} component="div">
+                    {product.description}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    ${product.price}
+                  </Typography>
+                </CardContent>
+
+                {/* Add to Cart Button */}
+                <Typography variant="h4">
+                  <Button
+                      ref={(el) => {
+                        buttonRefs.current[product.id - 1] = el; 
+                      }}
+                    onClick={(e1) =>
+                      handleAddToCart(
+                        {
+                          id: product.id,
+                          title: product.title,
+                          price: product.price,
+                          image: product.image,
+                          quantity: 1,
+                        },
+                        e1.currentTarget
+                      )
+                    }
+                    sx={{
+                      background: "black",
+                      color: "white",
+                      padding: "5px 5px",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        background: "#a8a5a5",
+                      },
+                    }}
+                  >
+                    Add
+                  </Button>
+                </Typography>
+              </Card>
+            </Grid>
+          ))}
+          {/* Loader Overlay */}
+          {isLoading && (
+            <Box
+              sx={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                zIndex: 9999,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MoonLoader color="#000" loading={isLoading} size={50} />
+            </Box>
+          )}
+        </Grid>
+      </Box>
+    </>
   );
 };
 

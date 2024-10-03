@@ -11,11 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Grid from "@mui/material/Grid2";
 import { useDispatch } from "react-redux";
 import { addToCart, CartItemType } from "@/store/cartSlice";
 import MoonLoader from "react-spinners/MoonLoader";
+import useFlyingAnimation from "@/hooks/useFlyingAnimation";
 
 const products = [
   {
@@ -90,6 +91,10 @@ interface WishList {
 const Categories: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();  
+  const { animateFlyToCart } = useFlyingAnimation();
+
+    // Create a ref for the button
+    const buttonRefs = useRef<(HTMLButtonElement | null)[]>(new Array(products.length).fill(null));
 
   const handleLinkClick = () => {
     setIsLoading(true);
@@ -103,9 +108,11 @@ const Categories: React.FC = () => {
   }, []);
   
   // Function to add item to the cart
-  const handleAddToCart = (item: CartItemType) => {
+  const handleAddToCart = (item: CartItemType, button: HTMLButtonElement) => {
+    animateFlyToCart(button);
     dispatch(addToCart(item));
   };
+
 
   const [wishList, setWishList] = useState<WishList[]>([]);
   const breadcrumbItems = [
@@ -250,29 +257,35 @@ const Categories: React.FC = () => {
                     </CardContent>
                     {/* Add to Cart Button */}
                     <Typography variant="h4">
-                      <Button
-                        onClick={() =>
-                          handleAddToCart({
-                            id: product.id,
-                            title: product.title,
-                            price: product.price,
-                            image: product.image,
-                            quantity: 1,
-                          })
-                        }
-                        sx={{
-                          background: "black",
-                          color: "white",
-                          padding: "5px 5px",
-                          fontWeight: "bold",
-                          "&:hover": {
-                            background:"#a8a5a5",
-                          },
-                        }}
-                      >
-                        Add
-                      </Button>
-                    </Typography>
+                  <Button
+                      ref={(el) => {
+                        buttonRefs.current[product.id - 1] = el; 
+                      }}
+                    onClick={(e1) =>
+                      handleAddToCart(
+                        {
+                          id: product.id,
+                          title: product.title,
+                          price: product.price,
+                          image: product.image,
+                          quantity: 1,
+                        },
+                        e1.currentTarget
+                      )
+                    }
+                    sx={{
+                      background: "black",
+                      color: "white",
+                      padding: "5px 5px",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        background: "#a8a5a5",
+                      },
+                    }}
+                  >
+                    Add
+                  </Button>
+                </Typography>
                   </Card>
                 </Grid>
               </>

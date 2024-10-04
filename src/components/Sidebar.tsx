@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Drawer, List, ListItem, ListItemText, Divider } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { selectMenuItems } from '../store/menuSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import '../styles/globals.scss';
 import Image from 'next/image';
+import { getAllCategory } from '@/store/categoriesSlice';
+import { getAllSubCategoryByCategoryId } from '@/store/subCategoriesSlice';
+import { getAllProducts } from '@/store/productSlice';
 import { useScreenSize } from '@/hooks/useScreenSize';
+import { Categories, Products } from '@/interface';
 
 interface SidebarProps {
   open: boolean;
@@ -13,26 +16,53 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
-  const menuItems = useSelector(selectMenuItems);
+  const selector = useSelector((state) => state);
   const router = useRouter();
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const [activeSubItem, setActiveSubItem] = useState<number | null>(null);
+  const [category, setCategory] = useState<Categories[]>([])
+  const [subCategories, setSubCategories] = useState<Categories[]>([])
+  const [products, setProducts] = useState<Products[]>([])
+  const dispatch = useDispatch<any>()
   const {isMobile}=useScreenSize();
 
   const handleNavigation = (path: string, itemId: number) => {
     router.push(path);
     setActiveItem(itemId);
-    setActiveSubItem(null);
+    setActiveSubItem(itemId);
     onClose();
   };
 
-  const handleMouseEnter = (itemId: number) => setActiveItem(itemId);
+  const handleMouseEnter = async (itemId: number) => {
+    setActiveItem(itemId);
+    const subCatresponse = await dispatch(getAllSubCategoryByCategoryId(itemId))
+    setSubCategories(subCatresponse.payload.result)
+  }
+
   const handleMouseLeave = () => {
     setActiveItem(null);
     setActiveSubItem(null);
   };
 
-  const handleSubMouseEnter = (subItemId: number) => setActiveSubItem(subItemId);
+  const handleSubMouseEnter = async (subItemId: number) => {
+    setActiveSubItem(subItemId);
+    const productsResponse = await dispatch(getAllProducts(subItemId))
+    setProducts(productsResponse.payload.result);
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await dispatch(getAllCategory());
+      const categories = response.payload.result;
+      setCategory(categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, [])
 
   return (
     <Drawer
@@ -54,41 +84,49 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
         onMouseLeave={handleMouseLeave}
       >
         <List>
-          {menuItems.map(item => (
-            <ListItem
-              key={item.id}
-              onMouseEnter={() => handleMouseEnter(item.id)}
-              onClick={() => handleNavigation(item.path, item.id)}
-              className={activeItem === item.id ? 'active' : ''}
-            >
-              <ListItemText primary={item.title} />
-              {activeItem === item.id && item.subItems && (
-                <ul className={`subsider-bar ${activeItem === item.id ? 'active' : ''}`}>
-                  {item.subItems.map(subItem => (
-                    <li key={subItem.id} onMouseEnter={() => handleSubMouseEnter(subItem.id)}>
-                      <ListItemText primary={subItem.title} />
-                      {activeSubItem === subItem.id && subItem.subItems && (
-                        <ul className="sub-submenu">
-                          <li className={`product-img ${activeItem === item.id ? 'active' : ''}`}>
-                            {subItem.subItems.map(subSubItem => (
-                              <div key={subSubItem.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <Image
-                                  src={subSubItem.image}
-                                  alt={subSubItem.imageName}
-                                  width={100}
-                                  height={100}
-                                />
-                                <span style={{ marginLeft: '10px' }}>{subSubItem.imageName}</span>
-                              </div>
-                            ))}
+          {category.map(item => (
+            (
+              item.isActive &&
+              <>
+                <ListItem
+                  key={`category-${item.id}`}
+                  onMouseEnter={() => handleMouseEnter(item.id)}
+                  onClick={() => handleNavigation(item.name, item.id)}
+                  className={activeItem === item.id ? 'active' : ''}
+                >
+                  <>
+                    <ListItemText primary={item.name} />
+                    {activeItem === item.id && (
+                      <ul className={`subsider-bar ${activeItem === item.id ? 'active' : ''}`}>
+                        {subCategories.map(subItem => (
+                          <li key={subItem.id} onMouseEnter={() => handleSubMouseEnter(subItem.id)}>
+                            <ListItemText primary={subItem.name} key={item.id}/>
+                            {activeSubItem === subItem.id && (
+                              <ul className="sub-submenu">
+                                <li className={`product-img ${activeItem === item.id ? 'active' : ''}`}>
+                                  {products.map(prodItem => (
+                                    <div key={`product-${prodItem.id}`} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                                      <Image
+                                        src={`${process.env.NEXT_PUBLIC_APP_API_IMAGE_URL}${prodItem.image.replace(/^~\//, '')}`}
+                                        alt={prodItem.name}
+                                        width={100}
+                                        height={100}
+                                        unoptimized
+                                      />
+                                      <span style={{ marginLeft: '10px' }}>{prodItem.name}</span>
+                                    </div>
+                                  ))}
+                                </li>
+                              </ul>
+                            )}
                           </li>
-                        </ul>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </ListItem>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                </ListItem>
+              </>
+            )
           ))}
         </List>
         <Divider />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -18,35 +18,33 @@ import CloseIcon from "@mui/icons-material/Close";
 import SignIn from "@/app/signin/page";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Cart from "../../src/app/cart/page";
-import { CartItemType } from "@/store/cartSlice";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { ToastContainer } from "react-toastify";
+import { deleteCartProduct, getAllCartProduct, updateCartProduct } from "@/store/productSlice";
 
 interface HeaderProps {
   onSidebarToggle: () => void;
   sidebarOpen: boolean;
-  addToCart: (item: CartItemType) => void;
-  removeFromCart: (id: number) => void;
-  deleteFromCart: (id: number) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onSidebarToggle,
-  sidebarOpen,
-  addToCart,
-  removeFromCart,
-  deleteFromCart,
+  sidebarOpen
 }) => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { isMobile } = useScreenSize();
+  const [cartCount, setCartCount] = useState(0)
+  const [cartItem, setCartItem] = useState()
+  const dispatch = useDispatch<any>();
 
-  // Access cart count and items from Redux state
-  const cartCount = useSelector((state: RootState) => state.cart.cartCount);
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const userId = window.localStorage.getItem("id");
+
+  const cartItems = useSelector((state: RootState) => state.ProductsSlice.cartData);
 
   const handleSearchToggle = () => {
     setSearchVisible((prev) => !prev);
@@ -72,8 +70,41 @@ export const Header: React.FC<HeaderProps> = ({
     document.body.style.overflow = "auto";
   };
 
+  const fetchData = async () => {
+    if (userId) {
+      const { payload } = await dispatch(getAllCartProduct(parseInt(userId)))
+      setCartCount(payload?.result?.length)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [cartItem]);
+
+  const handleDeleteCart = async (id: number) => {
+    try {
+      const res = await dispatch(deleteCartProduct(id));
+      fetchData();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleUpdateCartQty = async (addOrRemove: string, id: number, item: any) => {
+    try {
+      item.userId = userId;
+      var qty = addOrRemove === "add" ? item.quantity += 1 : item.quantity -= 1;
+      item.quantity = qty;
+      const { payload } = await dispatch(updateCartProduct({ cartId: id, value: item }))
+      fetchData();
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
+      <ToastContainer />
       <AppBar
         position="static"
         sx={{
@@ -120,7 +151,9 @@ export const Header: React.FC<HeaderProps> = ({
                 color: sidebarOpen ? "#fff" : "#282c34",
               }}
             >
-              ECommerce Fashion
+              <Link href={"/"} style={{ color: sidebarOpen ? "#fff" : "#282c34", textDecorationLine: "none" }}>
+                ECommerce Fashion
+              </Link>
             </Typography>
             {/* search Icon */}
             {searchVisible && (
@@ -227,13 +260,13 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={handleCloseSignIn}
               style={{
                 marginLeft: 'auto',
-                display:'flex',
+                display: 'flex',
               }}
               sx={{ color: "white", "&:hover": { color: "#b1b1b1" } }}
             >
               <CloseIcon />
             </IconButton>
-            <SignIn onClose={handleCloseSignIn}  />
+            <SignIn onClose={handleCloseSignIn} />
           </div>
           <div
             style={{
@@ -272,7 +305,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={handleCloseCart}
               style={{
                 marginLeft: 'auto',
-                display:'flex',
+                display: 'flex',
               }}
               sx={{ color: "white", "&:hover": { color: "#666161" } }}
             >
@@ -280,9 +313,6 @@ export const Header: React.FC<HeaderProps> = ({
             </IconButton>
             <Cart
               cartItems={cartItems}
-              addToCart={addToCart}
-              removeFromCart={removeFromCart}
-              deleteFromCart={deleteFromCart}
             />
           </div>
           <div

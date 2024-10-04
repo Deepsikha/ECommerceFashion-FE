@@ -1,91 +1,221 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
-interface Product {
-    id: number;
-    title: string;
-    image: string;
-    price: number;
-    description: string;
+const url = `${process.env.NEXT_PUBLIC_API_URL}/Products`;
+
+export const getAllProducts = createAsyncThunk(
+    "getAllProducts",
+    async (SubCategoryid: number) => {
+        try {
+            const data = await axios.get(`${url}/GetAllProducts?subCategoryFilter=${SubCategoryid}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const getAllProductsByCategoriesIds = createAsyncThunk(
+    "getAllProductsByCategoriesIds",
+    async (Categoryid: number) => {
+        try {
+            const data = await axios.get(`${url}/GetAllProducts?categoryFilter=${Categoryid}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const getAllProductsLists = createAsyncThunk(
+    "getAllProductsLists",
+    async () => {
+        try {
+            const data = await axios.get(`${url}/GetAllProductsList`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const getProductsById = createAsyncThunk(
+    "getProductsById",
+    async (id: number) => {
+        try {
+            const data = await axios.get(`${url}/GetProductsById?id=${id}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+
+export const addToCartProduct = createAsyncThunk(
+    "addToCartProduct",
+    async (val: object) => {
+        try {
+            const data = await axios.post(`${url}/AddToCart`, val);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const getAllCartProduct = createAsyncThunk(
+    "getAllCartProduct",
+    async (userId: number) => {
+        try {
+            const data = await axios.get(`${url}/GetUserCartDetails?userId=${userId}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const updateCartProduct = createAsyncThunk(
+    "updateCartProduct",
+    async ({ cartId, value }: { cartId: number; value: object }) => {
+        try {
+            const data = await axios.patch(`${url}/UpdateCart?cartId=${cartId}`, value);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const deleteCartProduct = createAsyncThunk(
+    "deleteCartProduct",
+    async (cartId: number) => {
+        try {
+            const data = await axios.delete(`${url}/DeleteCartItem?cartId=${cartId}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const addToWishListProduct = createAsyncThunk(
+    "addToWishListProduct",
+    async (val: object) => {
+        try {
+            const data = await axios.post(`${url}/AddToWishlist`, val);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const getAllWishListProduct = createAsyncThunk(
+    "getAllWishListProduct",
+    async (userId: number) => {
+        try {
+            const data = await axios.get(`${url}/GetUserWishlistDetails?userId=${userId}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+export const deleteWishListProduct = createAsyncThunk(
+    "deleteWishListProduct",
+    async (id: number) => {
+        try {
+            const data = await axios.delete(`${url}/DeleteWishlistItem?id=${id}`);
+            return data.data;
+        } catch (error: any) {
+            throw error.response.data;
+        }
+    }
+);
+
+const initialState = {
+    products: [],
+    productLists: [],
+    cartData: [],
+    productById: null,
+    errors: null
 }
 
-interface ProductState {
-    items: Product[];
-}
-
-const initialState: ProductState = {
-    items: [  {
-        id: 1,
-        title: "Product1",
-        image: "/images/img1.jpg",
-        price: 125,
-        description: "Stylish handbag perfect for any occasion.",
-      },
-      {
-        id: 2,
-        title: "Product2",
-        image: "/images/img2.jpg",
-        price: 125,
-        description: "Elegant handbag made from premium materials.",
-      },
-      {
-        id: 3,
-        title: "Product3",
-        image: "/images/img3.jpg",
-        price: 125,
-        description: "Spacious handbag with multiple compartments.",
-      },  {
-        id: 4,
-        title: "Product4",
-        image: "/images/img4.jpg",
-        price: 125,
-        description: "Fashionable bag with a sleek design.",
-      },
-      {
-        id: 5,
-        title: "Product5",
-        image: "/images/img5.jpg",
-        price: 1255,
-        description: "Trendy handbag with modern accents.",
-      },
-      {
-        id: 6,
-        title: "Product6",
-        image: "/images/img6.jpg",
-        price: 125,
-        description: "Compact handbag suitable for casual outings.",
-      },
-      {
-        id: 7,
-        title: "Product7",
-        image: "/images/img7.jpg",
-        price: 125,
-        description: "Classic handbag with a timeless look.",
-      },
-      {
-        id: 8,
-        title: "Product8",
-        image: "/images/img8.jpg",
-        price: 125,
-        description: "Luxury handbag for special occasions.",
-      },
-      {
-        id: 9,
-        title: "Product9",
-        image: "/images/nack1.jpg",
-        price: 125,
-        description: "Chic handbag that combines style and functionality.",
-      }], 
-};
-
-const productSlice = createSlice({
-    name: 'product',
+const ProductsSlice = createSlice({
+    name: "products",
     initialState,
-    reducers: {
-        setProducts(state, action: PayloadAction<Product[]>) {
-            state.items = action.payload;
-        },
-    },
-});
+    reducers: {},
+    extraReducers(builder) {
+        builder
+            .addCase(getAllProducts.pending, (state: any) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllProducts.fulfilled, (state: any, action: any) => {
+                state.status = "succeeded";
+                state.products = action.payload.result;
+            })
+            .addCase(getAllProducts.rejected, (state: any, action: any) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
 
-export const { setProducts } = productSlice.actions;
-export default productSlice.reducer;
+            .addCase(getAllProductsLists.pending, (state: any) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllProductsLists.fulfilled, (state: any, action: any) => {
+                state.status = "succeeded";
+                state.productLists = action.payload.result;
+            })
+            .addCase(getAllProductsLists.rejected, (state: any, action: any) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+
+            .addCase(getProductsById.pending, (state: any) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getProductsById.fulfilled, (state: any, action: any) => {
+                state.status = "succeeded";
+                state.productById = action.payload.result;
+            })
+            .addCase(getProductsById.rejected, (state: any, action: any) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+
+            .addCase(getAllProductsByCategoriesIds.pending, (state: any) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllProductsByCategoriesIds.fulfilled, (state: any, action: any) => {
+                state.status = "succeeded";
+                // state.productById = action.payload.result;
+            })
+            .addCase(getAllProductsByCategoriesIds.rejected, (state: any, action: any) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+
+            .addCase(getAllCartProduct.pending, (state: any) => {
+                state.status = "loading";
+                state.error = null;
+            })
+            .addCase(getAllCartProduct.fulfilled, (state: any, action: any) => {
+                state.status = "succeeded";
+                state.cartData = action.payload.result;
+            })
+            .addCase(getAllCartProduct.rejected, (state: any, action: any) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
+    }
+})
+
+
+export default ProductsSlice.reducer;

@@ -260,6 +260,24 @@
     }
 }
 
+.text-red{
+    margin: 0px;
+    color: red;
+}
+
+.MuiBox-root{
+    .MuiTextField-root{
+        margin-bottom: 0;
+        margin-top: 16px;
+    }
+}
+
+#btnsubmit.Mui-disabled{
+    color: rgb(163, 163, 163);
+    background-color: #424242;
+    cursor: not-allowed;
+}
+
 .product-list {
     height: calc(100vh - 345px);
     overflow: auto;

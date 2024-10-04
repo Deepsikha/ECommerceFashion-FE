@@ -1,14 +1,18 @@
 // store/store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import menuReducer from './menuSlice';
+import userSlice from './userSlice';
 import cartReducer from './cartSlice';
-import productReducer from './productSlice';
+import categoryReducer from './categoriesSlice';
+import subCategoryReducer from './subCategoriesSlice';
+import productsReducer from './productSlice';
 
 const store = configureStore({
   reducer: {
-    menu: menuReducer,
+    user: userSlice,
     cart: cartReducer,
-    product:productReducer,
+    categories: categoryReducer,
+    subCategories: subCategoryReducer,
+    ProductsSlice: productsReducer,
   },
 });
 

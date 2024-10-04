@@ -29,7 +29,6 @@ export const Footer: React.FC = () => {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
-        console.log('Submitted Email:', email);
         setEmail('');
         setOpenSnackbar(true);
     };

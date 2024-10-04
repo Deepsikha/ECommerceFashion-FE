@@ -1,66 +1,87 @@
 'use client';
-import React, { useState, useCallback } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Button,
     Checkbox,
     FormControlLabel,
     TextField,
-    Typography,
 } from '@mui/material';
+import { useFormik } from 'formik';
+import { SignInSchema, SignUpSchema } from '@/schema';
+import { useDispatch } from 'react-redux';
+import { signInUser, signUpUser } from '@/store/userSlice';
+import { SignUpValues } from '@/interface';
+import { ToastError, ToastSuccess } from '@/components/ToastMessage';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+
+const initialValues: SignUpValues & { confirmPassword: string } = {
+    firstName: "",
+    lastName: "",
+    emailAddress: "",
+    password: "",
+    address: "",
+    phoneNumber: "",
+    isTnCApplied: false,
+    confirmPassword: ""
+}
 
 interface SignInProps {
     onClose: () => void;
-  }
+}
 
 const SignIn: React.FC<SignInProps> = ({ onClose }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [name, setName] = useState('');
-    const [address, setAddress] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [dob, setDob] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [isSignIn, setIsSignIn] = useState(true);
-    const [isTCAccepted, setIsTCAccepted] = useState(false);
+    const dispatch = useDispatch<any>()
+    const route = useRouter()
 
-    const router = useRouter(); 
+    const validationSchema = isSignIn ? SignInSchema : SignUpSchema;
+    const { values, errors, touched, setErrors, handleChange, setFieldValue, handleSubmit, resetForm } = useFormik<SignUpValues>({
+        initialValues,
+        validationSchema: validationSchema,
+        onSubmit: async (values: SignUpValues) => {
 
-    const handleSubmit = useCallback(async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        const userData = {
-            name,
-            address,
-            phoneNumber,
-            dob,
-            email,
-            password,
-            confirmPassword,
-            rememberMe,
-            isTCAccepted,
-        };
-
-        try {
-            const response = await axios.post(isSignIn ? '/api/login' : '/api/register', userData);
-            console.log(response.data); 
-            
-            // Assuming login/register is successful
-            if (response.status === 200) {
-                onClose();
-                router.push('/'); 
-            }
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error('Error:', error.response?.data || error.message); 
-            } else {
-                console.error('Unexpected Error:', error);
+            try {
+                if (isSignIn) {
+                    const response = await dispatch(signInUser({ ...values }))
+                    console.log("res---", response);
+                    if (response.payload.token) {
+                        onClose();
+                        route.push("/");
+                    }
+                }
+                else {
+                    if (!values.isTnCApplied) {
+                        ToastError("Please checked the Terms & Conditions");
+                        return;
+                    }
+                    const response = await dispatch(signUpUser({ ...values }))
+                    if (response.payload?.success) {
+                        ToastSuccess(response.payload?.message);
+                        onClose();
+                        route.replace("/");
+                    } else if (response.error?.message) {
+                        ToastError(response.error?.message || "An error occurred.");
+                    }
+                }
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    console.error('Error:', error.response?.data || error.message);
+                } else {
+                    console.error('Unexpected Error:', error);
+                }
             }
         }
-    }, [name, address, phoneNumber, dob, email, password, confirmPassword, rememberMe, isTCAccepted, isSignIn, router, onclose]);
+    })
+
+    const handleLoginRegister = (isSignIn: boolean) => {
+        setErrors({});
+        resetForm();
+        setIsSignIn(isSignIn);
+    }
 
     return (
         <Box
@@ -75,7 +96,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
         >
             <Box display="flex" alignItems="center" justifyContent="center" mb={3}>
                 <Button
-                    onClick={() => setIsSignIn(true)}
+                    onClick={() => handleLoginRegister(true)}
                     variant={isSignIn ? 'contained' : 'outlined'}
                     sx={{
                         mx: 1,
@@ -90,7 +111,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                     Login
                 </Button>
                 <Button
-                    onClick={() => setIsSignIn(false)}
+                    onClick={() => handleLoginRegister(false)}
                     variant={!isSignIn ? 'contained' : 'outlined'}
                     sx={{
                         mx: 1,
@@ -113,9 +134,10 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                             label="Email"
                             variant="outlined"
                             fullWidth
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
+                            value={values.emailAddress}
+                            name="emailAddress"
+                            id="emailAddress"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -142,14 +164,18 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
+                        {errors.emailAddress && touched.emailAddress ? (
+                            <p className="text-red">{errors.emailAddress}</p>
+                        ) : null}
                         <TextField
                             type="password"
                             label="Password"
                             variant="outlined"
                             fullWidth
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
+                            value={values.password}
+                            name="password"
+                            id="password"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -176,6 +202,9 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
+                        {errors.password && touched.password ? (
+                            <p className="text-red">{errors.password}</p>
+                        ) : null}
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -197,12 +226,13 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                     <>
                         <TextField
                             type="text"
-                            label="Name"
+                            label="First Name"
                             variant="outlined"
                             fullWidth
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
+                            value={values.firstName}
+                            name="firstName"
+                            id="firstName"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -229,14 +259,56 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
+                        {errors.firstName && touched.firstName ? (
+                            <p className="text-red">{errors.firstName}</p>
+                        ) : null}
+                        <TextField
+                            type="text"
+                            label="Last Name"
+                            variant="outlined"
+                            fullWidth
+                            value={values.lastName}
+                            name="lastName"
+                            id="lastName"
+                            onChange={handleChange}
+                            sx={{
+                                mb: 2,
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                '& .MuiOutlinedInput-root': {
+                                    '&:hover fieldset': {
+                                        borderColor: '#007bff',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: '#007bff',
+                                    },
+                                },
+                                '& .MuiInputBase-input': {
+                                    color: '#ffffff',
+                                },
+                                '& .MuiInputLabel-root': {
+                                    color: '#ffffff',
+                                    '&.Mui-focused': {
+                                        color: '#007bff',
+                                    },
+                                },
+                                '& .MuiInputBase-input::placeholder': {
+                                    color: 'gray',
+                                    opacity: 0.7,
+                                },
+                            }}
+                        />
+                        {errors.lastName && touched.lastName ? (
+                            <p className="text-red">{errors.lastName}</p>
+                        ) : null}
                         <TextField
                             type="text"
                             label="Address"
                             variant="outlined"
                             fullWidth
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            required
+                            value={values.address}
+                            name="address"
+                            id="address"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -263,14 +335,18 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
+                        {errors.address && touched.address ? (
+                            <p className="text-red">{errors.address}</p>
+                        ) : null}
                         <TextField
                             type="tel"
                             label="Phone Number"
                             variant="outlined"
                             fullWidth
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            required
+                            value={values.phoneNumber}
+                            name="phoneNumber"
+                            id="phoneNumber"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -297,14 +373,18 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
+                        {errors.phoneNumber && touched.phoneNumber ? (
+                            <p className="text-red">{errors.phoneNumber}</p>
+                        ) : null}
                         <TextField
                             type="email"
                             label="Email"
                             variant="outlined"
                             fullWidth
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
+                            value={values.emailAddress}
+                            name="emailAddress"
+                            id="emailAddress"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -331,52 +411,18 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
-                        <TextField
-                            type="date"
-                            label="Date of Birth"
-                            variant="outlined"
-                            fullWidth
-                            InputLabelProps={{ shrink: true }}
-                            value={dob}
-                            onChange={(e) => setDob(e.target.value)}
-                            required
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                    '&::-webkit-calendar-picker-indicator': {
-                                        filter: 'invert(1)',
-                                    }
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
+                        {errors.emailAddress && touched.emailAddress ? (
+                            <p className="text-red">{errors.emailAddress}</p>
+                        ) : null}
                         <TextField
                             type="password"
                             label="Password"
                             variant="outlined"
                             fullWidth
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
+                            value={values.password}
+                            name="password"
+                            id="password"
+                            onChange={handleChange}
                             sx={{
                                 mb: 2,
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -403,6 +449,9 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                                 },
                             }}
                         />
+                        {errors.password && touched.password ? (
+                            <p className="text-red">{errors.password}</p>
+                        ) : null}
                         <TextField
                             type="password"
                             label="Confirm Password"
@@ -440,9 +489,11 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={isTCAccepted}
-                                    onChange={() => setIsTCAccepted(!isTCAccepted)}
+                                    checked={values.isTnCApplied}
+                                    onChange={handleChange}
                                     required
+                                    name="isTnCApplied"
+                                    id="isTnCApplied"
                                     sx={{
                                         color: '#ffffff',
                                         '&.Mui-checked': {
@@ -457,17 +508,11 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                     </>
                 )}
 
-                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2, bgcolor: '#676565', '&:hover': { bgcolor: '#5a5a5a' } }}>
+                <Button id='btnsubmit' type="submit" variant="contained" fullWidth sx={{ mt: 2, bgcolor: '#676565', '&:hover': { bgcolor: '#5a5a5a' } }}
+                    disabled={isSignIn ? false : !values.isTnCApplied}>
                     {isSignIn ? 'Login' : 'Create Account'}
                 </Button>
             </form>
-
-            <Typography variant="body2" mt={2} color="#ffffff">
-                Sign in with{' '}
-                <a href="https://www.example.com/login/oauth/google" style={{ color: '#007bff', textDecoration: 'none' }}>
-                    Google
-                </a>
-            </Typography>
         </Box>
     );
 };

@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
 import { Button, Typography, Box } from "@mui/material";
-import { CartItemType } from "../../store/cartSlice";
 import CartItem from "../cartItems/page";
+import { CartDetails } from '@/interface';
 
 type Props = {
-    cartItems?: CartItemType[];
-    addToCart: (clickedItem: CartItemType) => void;
-    removeFromCart: (id: number) => void;
-    deleteFromCart:(id:number)=>void;
+    cartItems?: CartDetails[];
 };
 
-const Cart: React.FC<Props> = ({ cartItems = [] }) => {
-    const calculateTotal = (items: CartItemType[]) =>
-        items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+const Cart: React.FC<Props> = ({ cartItems=[]}) => {
 
     // Load Razorpay script dynamically
     useEffect(() => {
@@ -27,19 +22,19 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
 
     // Function to initiate Razorpay payment
     const handleCheckout = async () => {
-        const totalAmount = calculateTotal(cartItems) || 0; 
 
         // Convert totalAmount to a number for the arithmetic operation
-        const amountInRupees = totalAmount * 100; 
+        var totalAmount = 100;
+        const amountInRupees = totalAmount * 100;
 
         const options = {
-            key: "rzp_test_LAGWrBltvmtMrE", 
+            key: "rzp_test_LAGWrBltvmtMrE",
             amount: (amountInRupees * 83.70),
             currency: "INR",
             name: "ECommerce Fashion",
             description: "Payment for your order",
             handler: function (response: any) {
-                alert(response.razorpay_payment_id); 
+                alert(response.razorpay_payment_id);
             },
             prefill: {
                 name: "Customer",
@@ -59,39 +54,31 @@ const Cart: React.FC<Props> = ({ cartItems = [] }) => {
     };
 
     return (
-       
-        <Box sx={{ padding: '32px 0 32px 15px', maxWidth: 600, margin: 'auto',display: "flex", flexDirection:'column' }}>
-            <Typography variant="h5" sx={{marginBottom:2, fontWeight:'bold'}}>
+        <Box sx={{ padding: '32px 0 32px 15px', maxWidth: 600, margin: 'auto', display: "flex", flexDirection: 'column' }}>
+            <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: 'bold' }}>
                 Your Cart
             </Typography>
             <div className='product-list'>
-            {cartItems.length === 0 ? (
-                <Typography variant="body1" align='center' sx={{marginTop:2}}>No items in cart.</Typography>
-            ) : (
-                cartItems.map((item) => (
-                    
-                    <CartItem key={item.id} item={item} />
-                    
-                ))
-            )}
+                <CartItem />
             </div>
+           
             <Typography variant="h6" sx={{ marginTop: 2 }}>
-                Total: ${calculateTotal(cartItems).toFixed(2)}
+                {/* Total: ${calculateTotal(cartItems).toFixed(2)} */}
             </Typography>
             <Box sx={{ textAlign: 'center', marginTop: 2 }}>
-            {cartItems.length > 0 && (
-                <Button
-                    variant="contained"
-                    color="success"
-                    sx={{ marginTop: 2 }}
-                    onClick={handleCheckout}
-                >
-                    Proceed to Checkout
-                </Button>
-            )}
+                {cartItems.length > 0 && (
+                    <Button
+                        variant="contained"
+                        color="success"
+                        sx={{ marginTop: 2 }}
+                        onClick={handleCheckout}
+                    >
+                        Proceed to Checkout
+                    </Button>
+                )}
             </Box>
         </Box>
-  
+
     );
 };
 

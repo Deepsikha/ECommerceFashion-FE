@@ -47,7 +47,6 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
             try {
                 if (isSignIn) {
                     const response = await dispatch(signInUser({ ...values }))
-                    console.log("res---", response);
                     if (response.payload.token) {
                         onClose();
                         route.push("/");
@@ -87,7 +86,7 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
         <Box
             display="flex"
             flexDirection="column"
-            minHeight='calc(100% - 40px)'
+            minHeight='calc(100% - 90px)'
             bgcolor="#000"
             p={3}
             borderRadius={2}
@@ -126,393 +125,403 @@ const SignIn: React.FC<SignInProps> = ({ onClose }) => {
                     Create Account
                 </Button>
             </Box>
-            <form onSubmit={handleSubmit} noValidate>
-                {isSignIn ? (
-                    <>
-                        <TextField
-                            type="email"
-                            label="Email"
-                            variant="outlined"
-                            fullWidth
-                            value={values.emailAddress}
-                            name="emailAddress"
-                            id="emailAddress"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.emailAddress && touched.emailAddress ? (
-                            <p className="text-red">{errors.emailAddress}</p>
-                        ) : null}
-                        <TextField
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            fullWidth
-                            value={values.password}
-                            name="password"
-                            id="password"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.password && touched.password ? (
-                            <p className="text-red">{errors.password}</p>
-                        ) : null}
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={rememberMe}
-                                    onChange={() => setRememberMe(!rememberMe)}
-                                    sx={{
-                                        color: '#ffffff',
-                                        '&.Mui-checked': {
-                                            color: '#007bff',
-                                        },
-                                    }}
-                                />
-                            }
-                            label="Remember Me"
-                            sx={{ color: '#ffffff' }}
-                        />
-                    </>
-                ) : (
-                    <>
-                        <TextField
-                            type="text"
-                            label="First Name"
-                            variant="outlined"
-                            fullWidth
-                            value={values.firstName}
-                            name="firstName"
-                            id="firstName"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.firstName && touched.firstName ? (
-                            <p className="text-red">{errors.firstName}</p>
-                        ) : null}
-                        <TextField
-                            type="text"
-                            label="Last Name"
-                            variant="outlined"
-                            fullWidth
-                            value={values.lastName}
-                            name="lastName"
-                            id="lastName"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.lastName && touched.lastName ? (
-                            <p className="text-red">{errors.lastName}</p>
-                        ) : null}
-                        <TextField
-                            type="text"
-                            label="Address"
-                            variant="outlined"
-                            fullWidth
-                            value={values.address}
-                            name="address"
-                            id="address"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.address && touched.address ? (
-                            <p className="text-red">{errors.address}</p>
-                        ) : null}
-                        <TextField
-                            type="tel"
-                            label="Phone Number"
-                            variant="outlined"
-                            fullWidth
-                            value={values.phoneNumber}
-                            name="phoneNumber"
-                            id="phoneNumber"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.phoneNumber && touched.phoneNumber ? (
-                            <p className="text-red">{errors.phoneNumber}</p>
-                        ) : null}
-                        <TextField
-                            type="email"
-                            label="Email"
-                            variant="outlined"
-                            fullWidth
-                            value={values.emailAddress}
-                            name="emailAddress"
-                            id="emailAddress"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.emailAddress && touched.emailAddress ? (
-                            <p className="text-red">{errors.emailAddress}</p>
-                        ) : null}
-                        <TextField
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            fullWidth
-                            value={values.password}
-                            name="password"
-                            id="password"
-                            onChange={handleChange}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        {errors.password && touched.password ? (
-                            <p className="text-red">{errors.password}</p>
-                        ) : null}
-                        <TextField
-                            type="password"
-                            label="Confirm Password"
-                            variant="outlined"
-                            fullWidth
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                '& .MuiOutlinedInput-root': {
-                                    '&:hover fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input': {
-                                    color: '#ffffff',
-                                },
-                                '& .MuiInputLabel-root': {
-                                    color: '#ffffff',
-                                    '&.Mui-focused': {
-                                        color: '#007bff',
-                                    },
-                                },
-                                '& .MuiInputBase-input::placeholder': {
-                                    color: 'gray',
-                                    opacity: 0.7,
-                                },
-                            }}
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={values.isTnCApplied}
-                                    onChange={handleChange}
-                                    required
-                                    name="isTnCApplied"
-                                    id="isTnCApplied"
-                                    sx={{
-                                        color: '#ffffff',
-                                        '&.Mui-checked': {
-                                            color: '#007bff',
-                                        },
-                                    }}
-                                />
-                            }
-                            label="I accept the Terms & Conditions"
-                            sx={{ color: '#ffffff' }}
-                        />
-                    </>
-                )}
 
+            <form
+
+                onSubmit={handleSubmit} noValidate>
+                <div style={{
+                    maxHeight: 'calc(100vh - 350px)',
+                    overflow: 'auto',
+                }}>
+                    {isSignIn ? (
+                        <>
+
+                            <TextField
+                                type="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                value={values.emailAddress}
+                                name="emailAddress"
+                                id="emailAddress"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.emailAddress && touched.emailAddress ? (
+                                <p className="text-red">{errors.emailAddress}</p>
+                            ) : null}
+                            <TextField
+                                type="password"
+                                label="Password"
+                                variant="outlined"
+                                fullWidth
+                                value={values.password}
+                                name="password"
+                                id="password"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.password && touched.password ? (
+                                <p className="text-red">{errors.password}</p>
+                            ) : null}
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={rememberMe}
+                                        onChange={() => setRememberMe(!rememberMe)}
+                                        sx={{
+                                            color: '#ffffff',
+                                            '&.Mui-checked': {
+                                                color: '#007bff',
+                                            },
+                                        }}
+                                    />
+                                }
+                                label="Remember Me"
+                                sx={{ color: '#ffffff' }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <TextField
+                                type="text"
+                                label="First Name"
+                                variant="outlined"
+                                fullWidth
+                                value={values.firstName}
+                                name="firstName"
+                                id="firstName"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.firstName && touched.firstName ? (
+                                <p className="text-red">{errors.firstName}</p>
+                            ) : null}
+                            <TextField
+                                type="text"
+                                label="Last Name"
+                                variant="outlined"
+                                fullWidth
+                                value={values.lastName}
+                                name="lastName"
+                                id="lastName"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.lastName && touched.lastName ? (
+                                <p className="text-red">{errors.lastName}</p>
+                            ) : null}
+                            <TextField
+                                type="text"
+                                label="Address"
+                                variant="outlined"
+                                fullWidth
+                                value={values.address}
+                                name="address"
+                                id="address"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.address && touched.address ? (
+                                <p className="text-red">{errors.address}</p>
+                            ) : null}
+                            <TextField
+                                type="tel"
+                                label="Phone Number"
+                                variant="outlined"
+                                fullWidth
+                                value={values.phoneNumber}
+                                name="phoneNumber"
+                                id="phoneNumber"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.phoneNumber && touched.phoneNumber ? (
+                                <p className="text-red">{errors.phoneNumber}</p>
+                            ) : null}
+                            <TextField
+                                type="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                value={values.emailAddress}
+                                name="emailAddress"
+                                id="emailAddress"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.emailAddress && touched.emailAddress ? (
+                                <p className="text-red">{errors.emailAddress}</p>
+                            ) : null}
+                            <TextField
+                                type="password"
+                                label="Password"
+                                variant="outlined"
+                                fullWidth
+                                value={values.password}
+                                name="password"
+                                id="password"
+                                onChange={handleChange}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+                            {errors.password && touched.password ? (
+                                <p className="text-red">{errors.password}</p>
+                            ) : null}
+                            <TextField
+                                type="password"
+                                label="Confirm Password"
+                                variant="outlined"
+                                fullWidth
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                    '& .MuiOutlinedInput-root': {
+                                        '&:hover fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                        '&.Mui-focused fieldset': {
+                                            borderColor: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input': {
+                                        color: '#ffffff',
+                                    },
+                                    '& .MuiInputLabel-root': {
+                                        color: '#ffffff',
+                                        '&.Mui-focused': {
+                                            color: '#007bff',
+                                        },
+                                    },
+                                    '& .MuiInputBase-input::placeholder': {
+                                        color: 'gray',
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            />
+
+                        </>
+                    )}
+                </div>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={values.isTnCApplied}
+                            onChange={handleChange}
+                            required
+                            name="isTnCApplied"
+                            id="isTnCApplied"
+                            sx={{
+                                color: '#ffffff',
+                                '&.Mui-checked': {
+                                    color: '#007bff',
+                                },
+                            }}
+                        />
+                    }
+                    label="I accept the Terms & Conditions"
+                    sx={{ color: '#ffffff' }}
+                />
                 <Button id='btnsubmit' type="submit" variant="contained" fullWidth sx={{ mt: 2, bgcolor: '#676565', '&:hover': { bgcolor: '#5a5a5a' } }}
                     disabled={isSignIn ? false : !values.isTnCApplied}>
                     {isSignIn ? 'Login' : 'Create Account'}
                 </Button>
             </form>
+
         </Box>
     );
 };

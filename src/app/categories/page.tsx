@@ -15,7 +15,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCartProduct, addToWishListProduct, getAllProductsLists } from "@/store/productSlice";
+import { addToCartProduct, addToWishListProduct, deleteWishListProduct, getAllProductsLists } from "@/store/productSlice";
 import { Products } from "@/interface";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { ToastError } from "@/components/ToastMessage";
@@ -76,16 +76,43 @@ const Categories: React.FC = () => {
   }
 
   const handleWishList = async (id: number) => {
+    const isInWishlist = wishList.includes(id);
+    
     try {
-      const res = await dispatch(addToWishListProduct({ productId: id, userId }))
-      if (res?.payload?.result == -1) {
-        ToastError(res?.payload?.message || "An error occurred.");
+      if (isInWishlist) {
+        // Call the API to remove the item from the wishlist
+        const res = await dispatch(deleteWishListProduct(id));
+        if (res?.payload?.result === -1) {
+          ToastError(res?.payload?.message || "An error occurred while removing from wishlist.");
+          return;
+        }
+  
+        // Update the local wishlist state
+        setWishList((prevList) => {
+          const newList = prevList.filter((item) => item !== id);
+          localStorage.setItem("wishList", JSON.stringify(newList));
+          return newList;
+        });
+      } else {
+        // Call the API to add the item to the wishlist
+        const res = await dispatch(addToWishListProduct({ productId: id, userId }));
+        if (res?.payload?.result === -1) {
+          ToastError(res?.payload?.message || "An error occurred while adding to wishlist.");
+          return;
+        }
+  
+        // Update the local wishlist state
+        setWishList((prevList) => {
+          const newList = [...prevList, id];
+          localStorage.setItem("wishList", JSON.stringify(newList));
+          return newList;
+        });
       }
     } catch (errors) {
-      console.log(errors)
+      console.log(errors);
     }
-  }
-
+  };
+  
   return (
     <>
       <ToastContainer />
@@ -95,13 +122,6 @@ const Categories: React.FC = () => {
         <Typography variant="h4" className="Top-heading">
           View All Products
         </Typography>
-
-        {/* Display Loader when isLoading is true
-       {isLoading && (
-        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-          <MoonLoader color="#000" loading={isLoading} size={50} />
-        </Box>
-      )} */}
 
         <Box sx={{ backgroundColor: "#e9e9e9" }}>
           <Grid
@@ -213,24 +233,12 @@ const Categories: React.FC = () => {
                   </CardContent>
 
                   {/* Add to Cart Button */}
-                  <Typography variant="h4">
+                  <Typography variant="h4" sx={{ textAlign: "center" }}>
                     <Button
                       ref={(el) => {
                         buttonRefs.current[product.id - 1] = el;
                       }}
-                      onClick={(e1) => handleAddToCart({ product },
-                        // onClick={(e1) =>
-                        //   handleAddToCart(
-                        //     {
-                        //       id: product.id,
-                        //       title: product.title,
-                        //       price: product.price,
-                        //       image: product.image,
-                        //       quantity: 1,
-                        //     },
-                        e1.currentTarget
-                      )
-                      }
+                      onClick={(e1) => handleAddToCart( product,e1.currentTarget)}
                       sx={{
                         background: "black",
                         color: "white",

@@ -61,11 +61,12 @@ export const Dashboard: React.FC = () => {
     const itemsPerPage = 4;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const {isMobile}=useScreenSize();
+    const { isMobile } = useScreenSize();
 
     const handleLinkClick = () => {
         setIsLoading(true);
-      };
+    };
+
     const handleImageClick = (link: string) => {
         router.push(link);
     };
@@ -84,15 +85,17 @@ export const Dashboard: React.FC = () => {
 
     return (
         <>
-            <Box sx={{ position: 'relative', width: '100%', height: '1500px', overflow: 'hidden' ,cursor:'pointer'}}>
-                <Image
-                    src={DashImag1}
-                    alt="Dashboard Background"
-                    fill
-                    style={{ objectFit: 'cover' }}
-                />
+            <Box sx={{ position: 'relative', width: '100%', height: '1500px', overflow: 'hidden', cursor: 'pointer' }}>
+                <MuiLink href={"/categories"} onClick={handleLinkClick}>
+                    <Image
+                        src={DashImag1}
+                        alt="Dashboard Background"
+                        fill
+                        style={{ objectFit: 'cover' }}
+                    />
+                </MuiLink>
             </Box>
-            
+
             {/* Centered Text Section */}
             <Box sx={{ textAlign: 'center', marginTop: 2, padding: 2 }}>
                 <Typography variant="h4" sx={{ color: '#333', fontWeight: 'bold' }}>
@@ -142,11 +145,11 @@ export const Dashboard: React.FC = () => {
                                         display: 'flex',
                                         transition: 'transform 0.5s ease',
                                         transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
-                                        width: `${(itemData.length / itemsPerPage) * 100}%`, 
+                                        width: `${(itemData.length / itemsPerPage) * 100}%`,
                                     }}
                                 >
                                     {itemData.map((item) => (
-                                        <Grid key={item.title} sx={{width: {xs: '100%', sm: '50%',  md: '25%',  }, flexShrink: 0 }}>
+                                        <Grid key={item.title} sx={{ width: { xs: '100%', sm: '50%', md: '25%', }, flexShrink: 0 }}>
                                             <Box
                                                 onClick={() => handleImageClick(item.link)}
                                                 sx={{
@@ -159,17 +162,17 @@ export const Dashboard: React.FC = () => {
                                                     transition: 'transform 0.3s, box-shadow 0.3s',
                                                     '&:hover': {
                                                         transform: 'scale(1.05)',
-                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)', 
+                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
                                                     },
                                                 }}
                                             >
                                                 <MuiLink href={"/categories"} onClick={handleLinkClick}>
-                                                <Image
-                                                    src={item.img}
-                                                    alt={item.title}
-                                                    fill
-                                                    style={{ objectFit: 'cover', borderRadius: '16px' }}
-                                                />
+                                                    <Image
+                                                        src={item.img}
+                                                        alt={item.title}
+                                                        fill
+                                                        style={{ objectFit: 'cover', borderRadius: '16px' }}
+                                                    />
                                                 </MuiLink>
                                             </Box>
                                         </Grid>
@@ -185,48 +188,156 @@ export const Dashboard: React.FC = () => {
                                 <ArrowForwardIosIcon />
                             </Button>
                         </Box>
-                    </Grid>     
+                    </Grid>
                 </Container>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: '100vh', overflow: 'hidden' }}>
                 {/* First Image */}
-                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' }}}>
-                    <Image
-                        src={DashImag2}
-                        alt="Image 2"
-                        fill
-                        style={{ objectFit: 'cover' }}
-                    />
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            opacity: 0,
-                            cursor: 'pointer',
-                            transition: 'opacity 0.3s ease',
-                            '&:hover': {
-                                opacity: 1, 
-                            },
-                        }}
-                    >
-                        <Typography variant="h4" sx={{ color: 'white' }}>
-                           The Sack Bag
-                        </Typography>
-                    </Box>
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
+                    <MuiLink href={"/categories"} onClick={handleLinkClick}>
+                        <Image
+                            src={DashImag2}
+                            alt="Image 2"
+                            fill
+                            style={{ objectFit: 'cover' }}
+                        />
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                cursor: 'pointer',
+                                transition: 'opacity 0.3s ease',
+                                '&:hover': {
+                                    opacity: 1,
+                                },
+                            }}
+                        >
+                            <Typography variant="h4" sx={{ color: 'white' }}>
+                                The Sack Bag
+                            </Typography>
+                        </Box>
+                    </MuiLink>
                 </Box>
 
                 {/* Second Image */}
                 <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
+                    <MuiLink href={"/categories"} onClick={handleLinkClick}>
+                        <Image
+                            src={DashImag3}
+                            alt="Image 3"
+                            fill
+                            style={{ objectFit: 'cover' }}
+                        />
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                cursor: 'pointer',
+                                transition: 'opacity 0.3s ease',
+                                '&:hover': {
+                                    opacity: 1,
+                                },
+                            }}
+                        >
+                            <Typography variant="h4" sx={{ color: 'white' }}>
+                                Bags
+                            </Typography>
+                        </Box>
+                    </MuiLink>
+                </Box>
+            </Box>
+
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: '100vh', overflow: 'hidden' }}>
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
+                    <MuiLink href={"/categories"} onClick={handleLinkClick}>
+                        <Image
+                            src={DashImag4}
+                            alt="Image 4"
+                            fill
+                            style={{ objectFit: 'cover' }}
+                        />
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                cursor: 'pointer',
+                                transition: 'opacity 0.3s ease',
+                                '&:hover': {
+                                    opacity: 1,
+                                },
+                            }}
+                        >
+                            <Typography variant="h4" sx={{ color: 'white' }}>
+                                The Fashion Collection
+                            </Typography>
+                        </Box>
+                    </MuiLink>
+                </Box>
+
+                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
+                    <MuiLink href={"/categories"} onClick={handleLinkClick}>
+                        <Image
+                            src={DashImag5}
+                            alt="Image 5"
+                            fill
+                            style={{ objectFit: 'cover' }}
+                        />
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                cursor: 'pointer',
+                                transition: 'opacity 0.3s ease',
+                                '&:hover': {
+                                    opacity: 1,
+                                },
+                            }}
+                        >
+                            <Typography variant="h4" sx={{ color: 'white' }}>
+                                Mini Bags
+                            </Typography>
+                        </Box>
+                    </MuiLink>
+                </Box>
+            </Box>
+
+            <Box sx={{ position: 'relative', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: { xs: '50vh', sm: '1100px' }, overflow: 'hidden' }}>
+                <MuiLink href={"/categories"} onClick={handleLinkClick}>
                     <Image
-                        src={DashImag3}
-                        alt="Image 3"
+                        src={DashImag6}
+                        alt="Dashboard Background"
                         fill
                         style={{ objectFit: 'cover' }}
                     />
@@ -245,116 +356,18 @@ export const Dashboard: React.FC = () => {
                             cursor: 'pointer',
                             transition: 'opacity 0.3s ease',
                             '&:hover': {
-                                opacity: 1, 
-                            },
-                        }}
-                    >
-                        <Typography variant="h4" sx={{ color: 'white' }}>
-                            Bags
-                        </Typography>
-                    </Box>
-                </Box>
-            </Box>
-
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: '100vh', overflow: 'hidden' }}>
-                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
-                    <Image
-                        src={DashImag4}
-                        alt="Image 4"
-                        fill
-                        style={{ objectFit: 'cover' }}
-                    />
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            opacity: 0,
-                            cursor: 'pointer',
-                            transition: 'opacity 0.3s ease',
-                            '&:hover': {
-                                opacity: 1, 
-                            },
-                        }}
-                    >
-                        <Typography variant="h4" sx={{ color: 'white' }}>
-                            The Fashion Collection
-                        </Typography>
-                    </Box>
-                </Box>
-
-                <Box sx={{ position: 'relative', width: { xs: '100%', sm: '50%' }, height: { xs: '50vh', sm: '100%' } }}>
-                    <Image
-                        src={DashImag5}
-                        alt="Image 5"
-                        fill
-                        style={{ objectFit: 'cover' }}
-                    />
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            opacity: 0,
-                            cursor: 'pointer',
-                            transition: 'opacity 0.3s ease',
-                            '&:hover': {
                                 opacity: 1,
                             },
                         }}
                     >
                         <Typography variant="h4" sx={{ color: 'white' }}>
-                            Mini Bags
+                            Goggles & Bags
                         </Typography>
                     </Box>
-                </Box>
+                </MuiLink>
             </Box>
 
-            <Box sx={{ position: 'relative', flexDirection: { xs: 'column', sm: 'row' }, width: '100%',height: { xs: '50vh', sm: '1100px' }, overflow: 'hidden' }}>
-                <Image
-                    src={DashImag6}
-                    alt="Dashboard Background"
-                    fill
-                    style={{ objectFit: 'cover' }}
-                />
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        opacity: 0,
-                        cursor: 'pointer',
-                        transition: 'opacity 0.3s ease',
-                        '&:hover': {
-                            opacity: 1, 
-                        },
-                    }}
-                >
-                    <Typography variant="h4" sx={{ color: 'white' }}>
-                        Goggles & Bags
-                    </Typography>
-                </Box>
-            </Box>
-
-          <Box sx={{
+            <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 minHeight: '300px',
@@ -394,11 +407,11 @@ export const Dashboard: React.FC = () => {
                                         display: 'flex',
                                         transition: 'transform 0.5s ease',
                                         transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
-                                        width: `${(itemData.length / itemsPerPage) * 100}%`, 
+                                        width: `${(itemData.length / itemsPerPage) * 100}%`,
                                     }}
                                 >
                                     {itemData.map((item) => (
-                                        <Grid key={item.title} sx={{width: {xs: '100%', sm: '50%',  md: '25%',  }, flexShrink: 0 }}>
+                                        <Grid key={item.title} sx={{ width: { xs: '100%', sm: '50%', md: '25%', }, flexShrink: 0 }}>
                                             <Box
                                                 onClick={() => handleImageClick(item.link)}
                                                 sx={{
@@ -411,17 +424,17 @@ export const Dashboard: React.FC = () => {
                                                     transition: 'transform 0.3s, box-shadow 0.3s',
                                                     '&:hover': {
                                                         transform: 'scale(1.05)',
-                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)', 
+                                                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
                                                     },
                                                 }}
                                             >
                                                 <MuiLink href={"/categories"} onClick={handleLinkClick}>
-                                                <Image
-                                                    src={item.img}
-                                                    alt={item.title}
-                                                    fill
-                                                    style={{ objectFit: 'cover', borderRadius: '16px' }}
-                                                />
+                                                    <Image
+                                                        src={item.img}
+                                                        alt={item.title}
+                                                        fill
+                                                        style={{ objectFit: 'cover', borderRadius: '16px' }}
+                                                    />
                                                 </MuiLink>
                                             </Box>
                                         </Grid>
@@ -448,29 +461,29 @@ export const Dashboard: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-            <TextSection />
-            <AdditionalTextSection />
+                <TextSection />
+                <AdditionalTextSection />
             </Box>
 
             {/* Loader Overlay */}
-      {isLoading && (
-        <Box
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            zIndex: 9999,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <MoonLoader color="#000" loading={isLoading} size={50} />
-        </Box>
-      )}
+            {isLoading && (
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        zIndex: 9999,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <MoonLoader color="#000" loading={isLoading} size={50} />
+                </Box>
+            )}
         </>
     );
 };

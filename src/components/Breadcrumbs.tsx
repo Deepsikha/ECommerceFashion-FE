@@ -13,14 +13,9 @@ interface DynamicBreadcrumbsProps {
     items: BreadcrumbItem[];
 }
 
-function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    event.preventDefault();
-    console.info('You clicked a breadcrumb.');
-}
-
 export default function CustomBreadcrumbs({ items }: DynamicBreadcrumbsProps) {
     return (
-        <div role="presentation" onClick={handleClick}>
+        <div role="presentation">
             <Breadcrumbs aria-label="breadcrumb" sx={{ margin: "0 0 25px 105px" }}>
                 {items.map((item, index) => {
                     const isLast = index === items.length - 1;

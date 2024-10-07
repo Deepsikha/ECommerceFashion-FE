@@ -1,9 +1,24 @@
-
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import { deleteCookie, setCookie } from "cookies-next";
 import axiosInstance from "./axiosInstance";
 import {jwtDecode} from "jwt-decode";
+
+interface User {   
+        firstName: string,
+        lastName: string,
+        emailAddress: string,
+        password: string,
+        address: string,
+        phoneNumber: string,
+        isTnCApplied: true
+}
+
+interface UserState {
+    user: User | null; 
+    isAuthenticated: boolean;
+    error: null | string;
+}
 
 const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,7 +27,6 @@ export const signUpUser = createAsyncThunk(
     async (val: object) => {
         try {
             const createUser = await axiosInstance.post("/UserMaster/RegisterUser", val);
-            // const createUser = await axios.post(`${url}/UserMaster/RegisterUser`,val);
             return createUser.data;
         } catch (error: any) {
             throw error.response.data;
@@ -38,9 +52,8 @@ export const signInUser = createAsyncThunk(
     }
 )
 
-
-const initialState = {
-    user: [],
+const initialState:UserState = {
+    user:  null,
     isAuthenticated: false,
     error: null,
 }
@@ -49,12 +62,13 @@ const UserSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        logout: (state: any, action: any) => {
-            state.user = null,
-                state.error = null,
-                deleteCookie("role")
-            deleteCookie("token")
-        }
+        logout: (state) => {
+            state.user = null;
+            state.isAuthenticated = false;
+            state.error = null;
+            deleteCookie("role");
+            deleteCookie("token");
+        },
     },
     extraReducers(builder) {
         builder

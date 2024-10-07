@@ -15,7 +15,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCartProduct, getAllProducts, getAllProductsByCategoriesIds } from "@/store/productSlice";
+import { addToCartProduct, addToWishListProduct, getAllProducts, getAllProductsByCategoriesIds } from "@/store/productSlice";
 import { useParams } from "next/navigation";
 import { getAllSubCategoryByCategoryId } from "@/store/subCategoriesSlice";
 import { Products, SubCategory, WishList } from "@/interface";
@@ -32,12 +32,14 @@ const Categories: React.FC = () => {
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [products, setProducts] = useState<Products[]>([]);
   const [activeSubCategoryId, setActiveSubCategoryId] = useState<number>(0);
+  const [wishList, setWishList] = useState<number[]>([]);
   const { animateFlyToCart } = useFlyingAnimation();
 
   // Create a ref for the button
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>(new Array(products.length).fill(null));
 
   const categorySelector = useSelector((state: any) => state.categories.categories);
+  const userId = localStorage.getItem("id");
 
   const handleLinkClick = () => {
     setIsLoading(true);
@@ -73,7 +75,6 @@ const Categories: React.FC = () => {
     fetchSubCategories();
   }, [dispatch, CategoryIds])
 
-  const [wishList, setWishList] = useState<WishList[]>([]);
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Categories", href: "/categories" },
@@ -82,7 +83,6 @@ const Categories: React.FC = () => {
   ];
 
   const handleAddToCart = async (products: Products,button: HTMLButtonElement) => {
-    const userId = 1;
     try {
       const res = await dispatch(addToCartProduct({ productId: products.id, userId, quantity: 1 }))
       animateFlyToCart(button);
@@ -94,22 +94,30 @@ const Categories: React.FC = () => {
     }
   }
 
-  function handelWishList(id: number) {
-    setWishList((prev) => {
-      const existingItem = prev.find((item) => item.id === id);
-      if (existingItem) {
-        return prev.map((item) =>
-          item.id === id ? { ...item, wishListed: !item.wishListed } : item
-        );
+  const handleWishList = async (id: number) => {
+    try {
+      const res = await dispatch(addToWishListProduct({ productId: id, userId }));
+      if (res?.payload?.result == -1) {
+        ToastError(res?.payload?.message || "An error occurred.");
       } else {
-        return [...prev, { id, wishListed: true }];
+        // Update wishList state
+        setWishList((prevList) => {
+          if (prevList.includes(id)) {
+            // Remove from wishlist
+            const newList = prevList.filter((item) => item !== id);
+            localStorage.setItem("wishList", JSON.stringify(newList));
+            return newList;
+          } else {
+            // Add to wishlist
+            const newList = [...prevList, id];
+            localStorage.setItem("wishList", JSON.stringify(newList));
+            return newList;
+          }
+        });
       }
-    });
-  }
-
-  const isWishListed = (id: number) => {
-    const item = wishList.find((item) => item.id === id);
-    return item ? item.wishListed : false;
+    } catch (errors) {
+      console.log(errors);
+    }
   };
 
   return (
@@ -174,14 +182,14 @@ const Categories: React.FC = () => {
                     <IconButton
                       color="inherit"
                       className="Card-wish-icon"
-                      onClick={() => handelWishList(product.id)}
+                      onClick={() => handleWishList(product.id)}
                     >
                       <FavoriteIcon
-                        sx={{
-                          color: isWishListed(product.id)
-                            ? "#ff3d3d"
-                            : "#ffffff",
-                        }}
+                           sx={{
+                            color: wishList.includes(product.id)
+                              ? "#ff3d3d"
+                              : "#ffffff",
+                          }}
                       />
                     </IconButton>
                     {/* product Info section */}
@@ -239,10 +247,7 @@ const Categories: React.FC = () => {
                        ref={(el) => {
                         buttonRefs.current[product.id - 1] = el;
                       }}
-                      onClick={(e1) => handleAddToCart({ product },
-                        e1.currentTarget
-                      )
-                      }
+                      onClick={(e1) => handleAddToCart(product,e1.currentTarget)}
                         sx={{
                           background: "black",
                           color: "white",

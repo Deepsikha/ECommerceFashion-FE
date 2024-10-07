@@ -24,6 +24,8 @@ import Cart from "../../src/app/cart/page";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { ToastContainer } from "react-toastify";
 import { deleteCartProduct, getAllCartProduct, updateCartProduct } from "@/store/productSlice";
+import { logout } from "@/store/userSlice";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 interface HeaderProps {
   onSidebarToggle: () => void;
@@ -42,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [cartItem, setCartItem] = useState()
   const dispatch = useDispatch<any>();
 
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.user);
   const userId = window.localStorage.getItem("id");
 
   const cartItems = useSelector((state: RootState) => state.ProductsSlice.cartData);
@@ -73,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
   const fetchData = async () => {
     if (userId) {
       const { payload } = await dispatch(getAllCartProduct(parseInt(userId)))
-      setCartCount(payload?.result?.length)
+      setCartCount(payload?.result?.length || 0);
     }
   }
 
@@ -89,6 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
       console.log(error)
     }
   }
+
   const handleUpdateCartQty = async (addOrRemove: string, id: number, item: any) => {
     try {
       item.userId = userId;
@@ -101,6 +105,11 @@ export const Header: React.FC<HeaderProps> = ({
       console.log(error);
     }
   }
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+  };
 
   return (
     <>
@@ -222,17 +231,34 @@ export const Header: React.FC<HeaderProps> = ({
                   />
                 </IconButton>
               </Link>
+          
               {/* Profile Icon */}
-              <IconButton color="inherit" onClick={handleProfileClick}>
-                <AccountCircle
-                  sx={{
-                    color: sidebarOpen ? "#fff" : "#282c34",
-                    "&:hover": {
-                      color: sidebarOpen ? "#fff" : "#666161",
-                    },
-                  }}
-                />
-              </IconButton>
+                            {/* Profile Icon */}
+                            {isAuthenticated && user ? (
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography sx={{ color: sidebarOpen ? "#fff" : "#282c34", marginRight: 1 }}>
+                    Welcome, {user.firstName || 'User'}
+                  </Typography>
+                  {/* Logout icon */}
+                  <IconButton color="inherit" onClick={handleLogout}>
+                    <LogoutIcon
+                      sx={{
+                        color: sidebarOpen ? "#fff" : "#282c34",
+                        "&:hover": { color: sidebarOpen ? "#fff" : "#666161" },
+                      }}
+                    />
+                  </IconButton>
+                </Box>
+              ) : (
+                <IconButton color="inherit" onClick={handleProfileClick}>
+                  <AccountCircle
+                    sx={{
+                      color: sidebarOpen ? "#fff" : "#282c34",
+                      "&:hover": { color: sidebarOpen ? "#fff" : "#666161" },
+                    }}
+                  />
+                </IconButton>
+              )}
             </Box>
           </Toolbar>
         </Container>
@@ -250,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({
               height: 'calc(100% - 64px)',
               backgroundColor: "black",
               color: "white",
-              zIndex: 1100,
+              zIndex: 10000,
               padding: "20px",
               transition: "transform 0.3s ease-in-out",
               boxSizing: 'border-box',

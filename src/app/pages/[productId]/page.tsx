@@ -87,14 +87,6 @@ const Bags: React.FC<PageParams> = () => {
     }
   }
 
-  const item: CartItemType = {
-    id: 1,
-    name: "The Logo Chain Shoulder Strap",
-    price: 450.0,
-    quantity: 1,
-    image: "/images/bag4.jpg",
-  };
-
   return (
     <>
       <Box sx={{ padding: { xs: 2, md: 4 } }}>
@@ -102,7 +94,7 @@ const Bags: React.FC<PageParams> = () => {
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }} sx={{ textAlign: "center" }}>
             <Image
-              height="700"
+              height="300"
               width="700"
               alt={products.name}
               src={`${process.env.NEXT_PUBLIC_APP_API_IMAGE_URL}${products.image && products.image.replace(/^~\//, '')}`}
@@ -119,6 +111,13 @@ const Bags: React.FC<PageParams> = () => {
             <Typography variant="h4" sx={{ fontWeight: "bold", letterSpacing: "5px", textTransform: "uppercase", fontSize: { xs: "24px", md: "35px" } }}>
               {products.name}
             </Typography>
+            <Typography component="div" sx={{
+                      letterSpacing: "1.5px",
+                      fontSize: { xs: "24px", md: "20px" } ,
+                      overflow: 'hidden'
+                    }}>
+                      {products.description}
+                    </Typography>
             <Typography variant="h4" sx={{ fontSize: { xs: "20px", md: "24px" } }}>${products.price}.00</Typography>
             <Typography variant="h4">
               <Button onClick={handleAddToCart}

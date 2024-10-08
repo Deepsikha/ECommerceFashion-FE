@@ -231,34 +231,33 @@ export const Header: React.FC<HeaderProps> = ({
                   />
                 </IconButton>
               </Link>
-          
+
               {/* Profile Icon */}
-                            {/* Profile Icon */}
-                            {isAuthenticated && user ? (
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography sx={{ color: sidebarOpen ? "#fff" : "#282c34", marginRight: 1 }}>
-                    Welcome, {user.firstName || 'User'}
-                  </Typography>
-                  {/* Logout icon */}
-                  <IconButton color="inherit" onClick={handleLogout}>
-                    <LogoutIcon
-                      sx={{
-                        color: sidebarOpen ? "#fff" : "#282c34",
-                        "&:hover": { color: sidebarOpen ? "#fff" : "#666161" },
-                      }}
-                    />
-                  </IconButton>
-                </Box>
-              ) : (
+               {isAuthenticated && user ? (
+                <>
+                    <Typography sx={{ color: sidebarOpen ? "#fff" : "#282c34", marginRight: 1 }}>
+                        Welcome, {user.firstName || 'User'}
+                    </Typography>
+                    <IconButton color="inherit" onClick={handleLogout}>
+                        <LogoutIcon
+                            sx={{
+                                color: sidebarOpen ? "#fff" : "#282c34",
+                                "&:hover": { color: sidebarOpen ? "#fff" : "#666161" },
+                            }}
+                        />
+                    </IconButton>
+                </>
+            ) : (
                 <IconButton color="inherit" onClick={handleProfileClick}>
-                  <AccountCircle
-                    sx={{
-                      color: sidebarOpen ? "#fff" : "#282c34",
-                      "&:hover": { color: sidebarOpen ? "#fff" : "#666161" },
-                    }}
-                  />
+                    <AccountCircle
+                        sx={{
+                            color: sidebarOpen ? "#fff" : "#282c34",
+                            "&:hover": { color: sidebarOpen ? "#fff" : "#666161" },
+                        }}
+                    />
                 </IconButton>
-              )}
+            )}
+
             </Box>
           </Toolbar>
         </Container>

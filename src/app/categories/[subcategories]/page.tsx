@@ -82,7 +82,7 @@ const Categories: React.FC = () => {
     { label: "All Sub Categories" },
   ];
 
-  const handleAddToCart = async (products: Products,button: HTMLButtonElement) => {
+  const handleAddToCart = async (products: Products, button: HTMLButtonElement) => {
     try {
       const res = await dispatch(addToCartProduct({ productId: products.id, userId, quantity: 1 }))
       animateFlyToCart(button);
@@ -185,11 +185,11 @@ const Categories: React.FC = () => {
                       onClick={() => handleWishList(product.id)}
                     >
                       <FavoriteIcon
-                           sx={{
-                            color: wishList.includes(product.id)
-                              ? "#ff3d3d"
-                              : "#ffffff",
-                          }}
+                        sx={{
+                          color: wishList.includes(product.id)
+                            ? "#ff3d3d"
+                            : "#ffffff",
+                        }}
                       />
                     </IconButton>
                     {/* product Info section */}
@@ -244,10 +244,10 @@ const Categories: React.FC = () => {
                     {/* Add to Cart Button */}
                     <Typography variant="h4">
                       <Button
-                       ref={(el) => {
-                        buttonRefs.current[product.id - 1] = el;
-                      }}
-                      onClick={(e1) => handleAddToCart(product,e1.currentTarget)}
+                        ref={(el) => {
+                          buttonRefs.current[product.id - 1] = el;
+                        }}
+                        onClick={(e1) => handleAddToCart(product, e1.currentTarget)}
                         sx={{
                           background: "black",
                           color: "white",
@@ -256,7 +256,7 @@ const Categories: React.FC = () => {
                           "&:hover": {
                             background: "#a8a5a5",
                           },
-                         
+
                         }}
                       >
                         <ShoppingCartIcon
@@ -287,14 +287,15 @@ const Categories: React.FC = () => {
             <Typography gutterBottom variant="h5" component="div" sx={{ textAlign: "center" }}>
               Product Not Found
             </Typography>}
+          {/* Loader Overlay */}
           {isLoading && (
             <Box
               sx={{
                 position: "fixed",
-                top: 0,
+                top: "64px",
                 left: 0,
                 width: "100vw",
-                height: "100vh",
+                height: `calc(100vh - 64px)`,
                 backgroundColor: "rgba(255, 255, 255, 0.8)",
                 zIndex: 9999,
                 display: "flex",

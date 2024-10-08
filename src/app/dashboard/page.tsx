@@ -470,10 +470,10 @@ export const Dashboard: React.FC = () => {
                 <Box
                     sx={{
                         position: "fixed",
-                        top: 0,
+                        top: "64px",
                         left: 0,
                         width: "100vw",
-                        height: "100vh",
+                        height: `calc(100vh - 64px)`,
                         backgroundColor: "rgba(255, 255, 255, 0.8)",
                         zIndex: 9999,
                         display: "flex",

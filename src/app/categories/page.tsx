@@ -77,7 +77,7 @@ const Categories: React.FC = () => {
 
   const handleWishList = async (id: number) => {
     const isInWishlist = wishList.includes(id);
-    
+
     try {
       if (isInWishlist) {
         // Call the API to remove the item from the wishlist
@@ -86,7 +86,7 @@ const Categories: React.FC = () => {
           ToastError(res?.payload?.message || "An error occurred while removing from wishlist.");
           return;
         }
-  
+
         // Update the local wishlist state
         setWishList((prevList) => {
           const newList = prevList.filter((item) => item !== id);
@@ -100,7 +100,7 @@ const Categories: React.FC = () => {
           ToastError(res?.payload?.message || "An error occurred while adding to wishlist.");
           return;
         }
-  
+
         // Update the local wishlist state
         setWishList((prevList) => {
           const newList = [...prevList, id];
@@ -112,7 +112,7 @@ const Categories: React.FC = () => {
       console.log(errors);
     }
   };
-  
+
   return (
     <>
       <ToastContainer />
@@ -238,7 +238,7 @@ const Categories: React.FC = () => {
                       ref={(el) => {
                         buttonRefs.current[product.id - 1] = el;
                       }}
-                      onClick={(e1) => handleAddToCart( product,e1.currentTarget)}
+                      onClick={(e1) => handleAddToCart(product, e1.currentTarget)}
                       sx={{
                         background: "black",
                         color: "white",
@@ -278,10 +278,10 @@ const Categories: React.FC = () => {
             <Box
               sx={{
                 position: "fixed",
-                top: 0,
+                top: "64px",
                 left: 0,
                 width: "100vw",
-                height: "100vh",
+                height: `calc(100vh - 64px)`,
                 backgroundColor: "rgba(255, 255, 255, 0.8)",
                 zIndex: 9999,
                 display: "flex",

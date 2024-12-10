@@ -51,6 +51,7 @@ export interface CartDetails {
 
 export interface WishListDetails{
     id: number;
+    productId: number;
     image: string;
     productDescription: string;
     productName: string;

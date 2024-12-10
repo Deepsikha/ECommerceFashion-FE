@@ -47,7 +47,7 @@ const Categories: React.FC = () => {
   const CategoryIds = parseInt(params.subcategories);
 
   useEffect(() => {
-    const storedWishList = localStorage.getItem("wishList");
+    const storedWishList = localStorage.getItem("wishlist");
     if (storedWishList) {
       setWishList(JSON.parse(storedWishList));
     }
@@ -105,12 +105,12 @@ const Categories: React.FC = () => {
           if (prevList.includes(id)) {
             // Remove from wishlist
             const newList = prevList.filter((item) => item !== id);
-            localStorage.setItem("wishList", JSON.stringify(newList));
+            localStorage.setItem("wishlist", JSON.stringify(newList));
             return newList;
           } else {
             // Add to wishlist
             const newList = [...prevList, id];
-            localStorage.setItem("wishList", JSON.stringify(newList));
+            localStorage.setItem("wishlist", JSON.stringify(newList));
             return newList;
           }
         });

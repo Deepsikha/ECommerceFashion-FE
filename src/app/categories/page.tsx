@@ -15,7 +15,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCartProduct, addToWishListProduct, deleteWishListProduct, getAllProductsLists } from "@/store/productSlice";
+import {
+  addToCartProduct,
+  addToWishListProduct,
+  deleteWishListProduct,
+  getAllProductsLists,
+} from "@/store/productSlice";
 import { Products } from "@/interface";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { ToastError } from "@/components/ToastMessage";
@@ -23,27 +28,28 @@ import MoonLoader from "react-spinners/MoonLoader";
 import useFlyingAnimation from "@/hooks/useFlyingAnimation";
 import { ToastContainer } from "react-toastify";
 
-
 const Categories: React.FC = () => {
   const [wishList, setWishList] = useState<number[]>([]);
+  const [cartList, setCartList] = useState<number[]>([]);
   const [products, setProducts] = useState<Products[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch<any>();
   const { animateFlyToCart } = useFlyingAnimation();
 
   // Create a ref for the button
-  const buttonRefs = useRef<(HTMLButtonElement | null)[]>(new Array(products.length).fill(null));
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>(
+    new Array(products.length).fill(null)
+  );
 
-  const categorySelector = useSelector((state: any) => state.categories.categories);
+  const categorySelector = useSelector(
+    (state: any) => state.categories.categories
+  );
   const userId = localStorage.getItem("id");
 
-  const handleLinkClick = () => {
-    setIsLoading(true);
-  };
 
   // Load wishlist from localStorage when component mounts
   useEffect(() => {
-    const storedWishList = localStorage.getItem("wishList");
+    const storedWishList = localStorage.getItem("wishlist");
     if (storedWishList) {
       setWishList(JSON.parse(storedWishList));
     }
@@ -62,49 +68,61 @@ const Categories: React.FC = () => {
     { label: "All Categories" },
   ];
 
-  const handleAddToCart = async (products: Products, button: HTMLButtonElement) => {
+  const handleAddToCart = async (
+    products: Products,
+    button: HTMLButtonElement
+  ) => {
     try {
-      const res = await dispatch(addToCartProduct({ productId: products.id, userId, quantity: 1 }))
+      const res = await dispatch(
+        addToCartProduct({ productId: products.id, userId, quantity: 1 })
+      );
       animateFlyToCart(button);
       if (res?.payload?.result == -1) {
         ToastError(res?.payload?.message || "An error occurred.");
       }
+      setCartList((prevList) => {
+        const newList = prevList.filter((item) => item !== products.id);
+        return newList;
+      });
     } catch (errors) {
-      // ToastError(errors?.message || "An error occurred.");
-      console.log(errors)
+      console.log(errors);
     }
-  }
+  };
 
   const handleWishList = async (id: number) => {
     const isInWishlist = wishList.includes(id);
 
     try {
       if (isInWishlist) {
-        // Call the API to remove the item from the wishlist
         const res = await dispatch(deleteWishListProduct(id));
         if (res?.payload?.result === -1) {
-          ToastError(res?.payload?.message || "An error occurred while removing from wishlist.");
+          ToastError(
+            res?.payload?.message ||
+              "An error occurred while removing from wishlist."
+          );
           return;
         }
 
-        // Update the local wishlist state
         setWishList((prevList) => {
           const newList = prevList.filter((item) => item !== id);
-          localStorage.setItem("wishList", JSON.stringify(newList));
+          localStorage.setItem("wishlist", JSON.stringify(newList));
           return newList;
         });
       } else {
-        // Call the API to add the item to the wishlist
-        const res = await dispatch(addToWishListProduct({ productId: id, userId }));
+        const res = await dispatch(
+          addToWishListProduct({ productId: id, userId })
+        );
         if (res?.payload?.result === -1) {
-          ToastError(res?.payload?.message || "An error occurred while adding to wishlist.");
+          ToastError(
+            res?.payload?.message ||
+              "An error occurred while adding to wishlist."
+          );
           return;
         }
 
-        // Update the local wishlist state
         setWishList((prevList) => {
           const newList = [...prevList, id];
-          localStorage.setItem("wishList", JSON.stringify(newList));
+          localStorage.setItem("wishlist", JSON.stringify(newList));
           return newList;
         });
       }
@@ -133,12 +151,11 @@ const Categories: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            {
-              categorySelector && categorySelector.map((item: any, index: number) => {
+            {categorySelector &&
+              categorySelector.map((item: any, index: number) => {
                 return (
                   <>
-                    {
-                      item.isActive &&
+                    {item.isActive && (
                       <Grid key={index}>
                         <Link
                           className="categories-link"
@@ -147,11 +164,10 @@ const Categories: React.FC = () => {
                           {item.name}
                         </Link>
                       </Grid>
-                    }
+                    )}
                   </>
-                )
-              })
-            }
+                );
+              })}
           </Grid>
         </Box>
 
@@ -166,112 +182,128 @@ const Categories: React.FC = () => {
             gridTemplateColumns: "repeat( auto-fill, minmax(300px, 1fr) )",
           }}
         >
-          {products && products.map((product, index) => (
-            <>
-              <Grid className={"card-item"} key={index}>
-                <Card sx={{ maxWidth: 345 }}>
-                  {/* Wishlist Icon */}
-                  <IconButton
-                    color="inherit"
-                    className="Card-wish-icon"
-                    onClick={() => handleWishList(product.id)}
-                  >
-                    <FavoriteIcon
-                      sx={{
-                        color: wishList.includes(product.id)
-                          ? "#ff3d3d"
-                          : "#ffffff",
-                      }}
-                    />
-                  </IconButton>
-
-                  {/* Product Image */}
-                  <Box
-                    sx={{
-                      height: 300,
-                      position: "relative",
-                      width: "100%",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Link href={`/pages/${product.id}`}>
-                      <CardMedia
+          {products &&
+            products.map((product, index) => (
+              <>
+                <Grid className={"card-item"} key={index}>
+                  <Card sx={{ maxWidth: 345 }}>
+                    {/* Wishlist Icon */}
+                    <IconButton
+                      color="inherit"
+                      className="Card-wish-icon"
+                      onClick={() => handleWishList(product.id)}
+                    >
+                      <FavoriteIcon
                         sx={{
-                          height: "100%",
-                          transition: "transform 0.3s, box-shadow 0.3s",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                          },
+                          color: wishList.includes(product.id)
+                            ? "#ff3d3d"
+                            : "#ffffff",
                         }}
-                        image={`${process.env.NEXT_PUBLIC_APP_API_IMAGE_URL}${product.image.replace(/^~\//, '')}`}
-                        title={product.name}
                       />
-                    </Link>
-                  </Box>
+                    </IconButton>
 
-                  {/* Product Info */}
-                  <CardContent sx={{ textAlign: "center" }}>
-                    <Typography gutterBottom variant="h5" component="div" sx={{
-                      display: '-webkit-box',
-                      '-webkit-line-clamp': '1',
-                      '-webkit-box-orient': 'vertical',
-                      overflow: 'hidden'
-                    }}>
-                      {product.name}
-                    </Typography>
-                    <Typography component="div" sx={{
-                      display: '-webkit-box',
-                      '-webkit-line-clamp': '1',
-                      '-webkit-box-orient': 'vertical',
-                      overflow: 'hidden'
-                    }}>
-                      {product.description}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      ${product.price}
-                    </Typography>
-                  </CardContent>
-
-                  {/* Add to Cart Button */}
-                  <Typography variant="h4" sx={{ textAlign: "center" }}>
-                    <Button
-                      ref={(el) => {
-                        buttonRefs.current[product.id - 1] = el;
-                      }}
-                      onClick={(e1) => handleAddToCart(product, e1.currentTarget)}
+                    {/* Product Image */}
+                    <Box
                       sx={{
-                        background: "black",
-                        color: "white",
-                        padding: "5px 10px",
-                        fontWeight: "bold",
-                        "&:hover": {
-                          background: "#a8a5a5",
-                        },
+                        height: 300,
+                        position: "relative",
+                        width: "100%",
+                        overflow: "hidden",
                       }}
                     >
-                      <ShoppingCartIcon
-                        sx={{ color: "#fff", marginRight: "10px" }}
-                      />
-                      Add
-                    </Button>
-                    <Link href={`/pages/${product.id}`}>
-                      <Button
+                      <Link href={`/pages/${product.id}`}>
+                        <CardMedia
+                          sx={{
+                            height: "100%",
+                            transition: "transform 0.3s, box-shadow 0.3s",
+                            "&:hover": {
+                              transform: "scale(1.05)",
+                            },
+                          }}
+                          image={`${
+                            process.env.NEXT_PUBLIC_APP_API_IMAGE_URL
+                          }${product.image.replace(/^~\//, "")}`}
+                          title={product.name}
+                        />
+                      </Link>
+                    </Box>
+
+                    {/* Product Info */}
+                    <CardContent sx={{ textAlign: "center" }}>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
                         sx={{
-                          marginLeft: "10px",
+                          display: "-webkit-box",
+                          "-webkit-line-clamp": "1",
+                          "-webkit-box-orient": "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {product.name}
+                      </Typography>
+                      <Typography
+                        component="div"
+                        sx={{
+                          display: "-webkit-box",
+                          "-webkit-line-clamp": "1",
+                          "-webkit-box-orient": "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {product.description}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        ${product.price}
+                      </Typography>
+                    </CardContent>
+
+                    {/* Add to Cart Button */}
+                    <Typography variant="h4" sx={{ textAlign: "center" }}>
+                      <Button
+                        ref={(el) => {
+                          buttonRefs.current[product.id - 1] = el;
+                        }}
+                        onClick={(e1) =>
+                          handleAddToCart(product, e1.currentTarget)
+                        }
+                        sx={{
                           background: "black",
                           color: "white",
                           padding: "5px 10px",
                           fontWeight: "bold",
+                          "&:hover": {
+                            background: "#a8a5a5",
+                          },
                         }}
                       >
-                        View Details
+                        <ShoppingCartIcon
+                          sx={{ color: "#fff", marginRight: "10px" }}
+                        />
+                        Add
                       </Button>
-                    </Link>
-                  </Typography>
-                </Card>
-              </Grid>
-            </>
-          ))}
+                      <Link href={`/pages/${product.id}`}>
+                        <Button
+                          sx={{
+                            marginLeft: "10px",
+                            background: "black",
+                            color: "white",
+                            padding: "5px 10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          View Details
+                        </Button>
+                      </Link>
+                    </Typography>
+                  </Card>
+                </Grid>
+              </>
+            ))}
 
           {/* Loader Overlay */}
           {isLoading && (
